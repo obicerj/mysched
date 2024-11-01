@@ -36,7 +36,7 @@ export default function Home() {
               <AvatarImage src="https://github.com/shadcn.png" />
               <AvatarFallback>CN</AvatarFallback>
           </Avatar>
-          <p className="pt-2">{dayName}, {monthName} {today.getDay()}</p>
+          <p className="pt-2">{dayName}, {monthName} {today.getDate()}</p>
         </div>
 
         <div className="mt-8">
