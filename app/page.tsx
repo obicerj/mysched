@@ -47,7 +47,7 @@ export default function Home() {
     const eventsDummy = [
         {
             label: "Work",
-            color: "amber",
+            color: "bg-amber-100",
             title: "Evening shift",
             description: "Regular work shift",
             date: "01 November",
@@ -56,7 +56,7 @@ export default function Home() {
         },
         {
             label: "Work",
-            color: "blue",
+            color: "bg-blue-100",
             title: "Evening shift",
             description: "Regular work shift",
             date: "02 November",
@@ -67,7 +67,7 @@ export default function Home() {
 
     const events = eventsDummy.map((event, id) => {
         return (
-            <Card key={id} className={`mt-4 shadow-none bg-${event.color}-100`}>
+            <Card key={id} className={`mt-4 shadow-none ${event.color}`}>
                 <CardHeader>
                     <CardDescription className="text-slate-600">
                         {event.label}
