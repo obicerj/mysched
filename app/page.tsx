@@ -1,8 +1,11 @@
+"use client";
+
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Calendar } from "@/components/ui/calendar";
 import { Badge } from "@/components/ui/badge";
+import { format } from "date-fns";
 import {
     Card,
     CardContent,
@@ -11,6 +14,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { useEffect, useState } from "react";
 
 export default function Home() {
     const name = "Jestoni";
@@ -43,29 +47,59 @@ export default function Home() {
     const today = new Date();
     const dayName = days[today.getDay()];
     const monthName = months[today.getMonth()];
+    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-    const eventsDummy = [
+    interface Event {
+        label: string;
+        color: string;
+        title: string;
+        description: string;
+        date: string;
+        start: string;
+        end: string;
+    }
+
+    const eventsDummy: Event[] = [
         {
             label: "Work",
             color: "bg-amber-100",
-            title: "Evening shift",
+            title: "Night shift",
             description: "Regular work shift",
-            date: "01 November",
-            start: "5:00 PM",
-            end: "11:00 PM",
+            date: "2024-11-02T00:00:00",
+            start: "2024-11-02T16:00:00",
+            end: "2024-11-02T20:00:00",
         },
         {
             label: "Work",
             color: "bg-blue-100",
-            title: "Evening shift",
+            title: "Day shift",
             description: "Regular work shift",
-            date: "02 November",
-            start: "5:00 PM",
-            end: "11:00 PM",
+            date: "2024-11-02T00:00:00",
+            start: "2024-11-02T08:00:00",
+            end: "2024-11-02T15:00:00",
+        },
+        {
+            label: "Sideline",
+            color: "bg-red-100",
+            title: "Extra job",
+            description: "Extra work shift",
+            date: "2024-11-02T00:00:00",
+            start: "2024-11-02T06:00:00",
+            end: "2024-11-02T06:30:00",
         },
     ];
 
-    const events = eventsDummy.map((event, id) => {
+    const [sched, setSched] = useState(eventsDummy);
+
+    useEffect(() => {
+        // Sort events by start time
+        const sortSched = eventsDummy.sort(
+            (a, b) => new Date(a.start).getTime() - new Date(b.start).getTime()
+        );
+        setSched(sortSched);
+    }, []);
+
+    const events = sched.map((event, id) => {
         return (
             <Card key={id} className={`mt-4 shadow-none ${event.color}`}>
                 <CardHeader>
@@ -80,12 +114,14 @@ export default function Home() {
                     <p>{event.description}</p>
                 </CardContent>
                 <CardFooter className="justify-between">
-                    <p className="text-slate-600">{event.date}</p>
+                    <p className="text-slate-600">
+                        {format(event.date, "dd MMMM z")}
+                    </p>
                     <br />
                     <p className="space-x-1 text-slate-600">
-                        <span>{event.start}</span>
+                        <span>{format(event.start, "h:mma")}</span>
                         <span> - </span>
-                        <span>{event.end}</span>
+                        <span>{format(event.end, "h:mma")}</span>
                     </p>
                 </CardFooter>
             </Card>
@@ -102,7 +138,8 @@ export default function Home() {
                         <AvatarFallback>JO</AvatarFallback>
                     </Avatar>
                     <p className="pt-2">
-                        {dayName}, {monthName} {today.getDate()}
+                        {/* {dayName}, {monthName} {today.getDate()} */}
+                        {format(new Date(), "do MMMM Y")}
                     </p>
                 </div>
 
