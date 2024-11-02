@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import { Calendar } from "@/components/ui/calendar"
+import { Calendar } from "@/components/ui/calendar";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -9,7 +10,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 
 
 
@@ -26,6 +27,35 @@ export default function Home() {
   const dayName = days[today.getDay()];
   const monthName = months[today.getMonth()];
 
+  const eventsDummy = [
+    {label: "Work", color: "amber", title: "Evening shift", description: "Regular work shift", date: "01 November", start: "5:00 PM", end: "11:00 PM"},
+    {label: "Work", color: "blue", title: "Evening shift", description: "Regular work shift", date: "02 November", start: "5:00 PM", end: "11:00 PM"}
+  ];
+
+  const events = eventsDummy.map((event) => {
+    return (
+      <Card className={`mt-4 shadow-none bg-${event.color}-100`}>
+              <CardHeader>
+                <CardDescription className="text-slate-600">
+                  {event.label}
+                </CardDescription>
+                <CardTitle className="font-normal text-xl">{event.title}</CardTitle>
+              </CardHeader>
+              <CardContent className="text-slate-600">
+                <p>{event.description}</p>
+              </CardContent>
+              <CardFooter className="justify-between">
+                  <p className="text-slate-600">{event.date}</p>
+                  <br/>
+                  <p className="space-x-1 text-slate-600">
+                    <span>{event.start}</span>
+                    <span> - </span>
+                    <span>{event.end}</span>
+                  </p>
+              </CardFooter>
+            </Card>
+    )
+  })
 
   return (
     <div className="p-4 text-slate-800 font-[family-name:var(--font-geist-sans)]">
@@ -76,20 +106,7 @@ export default function Home() {
 
         
         <div className="mt-4">
-            <div>
-            <Card>
-              <CardHeader>
-                <CardTitle>Card Title</CardTitle>
-                <CardDescription>Card Description</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p>Card Content</p>
-              </CardContent>
-              <CardFooter>
-                <p>Card Footer</p>
-              </CardFooter>
-            </Card>
-            </div>
+            {events}
         </div>
         
       </main>
@@ -108,7 +125,7 @@ export default function Home() {
             width={16}
             height={16}
           />
-          Learn
+          Dashboard
         </a>
         <a
           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
@@ -123,7 +140,7 @@ export default function Home() {
             width={16}
             height={16}
           />
-          Examples
+          Create Schedule
         </a>
         <a
           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
@@ -138,7 +155,7 @@ export default function Home() {
             width={16}
             height={16}
           />
-          Go to nextjs.org →
+          Categories
         </a>
       </footer>
     </div>
