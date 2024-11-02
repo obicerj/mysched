@@ -63,7 +63,7 @@ export default function Home() {
       <main className="">
         <div className="flex justify-between">
           <Avatar className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full">
-              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarImage src="https://avatars.githubusercontent.com/u/10084955?v=4" />
               <AvatarFallback>JO</AvatarFallback>
           </Avatar>
           <p className="pt-2">{dayName}, {monthName} {today.getDate()}</p>
