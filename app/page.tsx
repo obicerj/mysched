@@ -1,10 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Calendar } from "@/components/ui/calendar";
-import { Badge } from "@/components/ui/badge";
 import { format, isToday } from "date-fns";
 import {
     Card,
@@ -105,8 +104,11 @@ export default function Home() {
         return (
             <Card key={id} className={`mt-4 shadow-none ${event.color}`}>
                 <CardHeader>
-                    <CardDescription className="text-slate-600">
-                        {event.label}
+                    <CardDescription className="flex text-slate-600 justify-between">
+                        <span className="underline underline-offset-8">
+                            {event.label}
+                        </span>
+                        <Checkbox className="w-6 h-6 rounded-full border-amber-500 data-[state=checked]:bg-amber-500" />
                     </CardDescription>
                     <CardTitle className="font-normal text-xl">
                         {event.title}
