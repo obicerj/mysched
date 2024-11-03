@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Calendar } from "@/components/ui/calendar";
 import { Badge } from "@/components/ui/badge";
-import { format } from "date-fns";
+import { format, isToday } from "date-fns";
 import {
     Card,
     CardContent,
@@ -18,8 +18,6 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
     const name = "Jestoni";
-    const totalEvent = 2;
-    const label = "work";
 
     const days = [
         "Sunday",
@@ -89,6 +87,10 @@ export default function Home() {
         },
     ];
 
+    const totalSchedToday = eventsDummy.reduce((count, sched) => {
+        return isToday(sched.start) ? count + 1 : count;
+    }, 0);
+
     const [sched, setSched] = useState(eventsDummy);
 
     useEffect(() => {
@@ -149,13 +151,11 @@ export default function Home() {
                         <span>You have</span>
                         {/* num of event */}
                         <span className="text-amber-500 font-semibold">
-                            {" "}
-                            2{" "}
+                            &nbsp;{totalSchedToday}&nbsp;
                         </span>
                         {/* event label */}
                         <span className="text-amber-500 font-semibold">
-                            {" "}
-                            {label}{" "}
+                            schedule
                         </span>
                         <br />
                         <span>waiting for you today.</span>
