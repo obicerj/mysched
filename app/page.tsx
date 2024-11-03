@@ -148,17 +148,17 @@ export default function Home() {
                 </div>
 
                 <div className="mt-8">
-                    <p className="text-slate-600">Hello {name},</p>
-                    <h1 className="text-3xl">
+                    <p className="text-xl text-slate-700 font-semibold">
+                        Hello {name},
+                    </p>
+                    <h1 className="text-4xl font-bold">
                         <span>You have</span>
                         {/* num of event */}
-                        <span className="text-amber-500 font-semibold">
+                        <span className="text-amber-500">
                             &nbsp;{totalSchedToday}&nbsp;
                         </span>
                         {/* event label */}
-                        <span className="text-amber-500 font-semibold">
-                            schedule
-                        </span>
+                        <span className="text-amber-500">schedule</span>
                         <br />
                         <span>waiting for you today.</span>
                     </h1>
