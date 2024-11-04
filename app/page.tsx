@@ -192,9 +192,9 @@ export default function Home() {
                 <div className="mt-4">{events}</div>
             </main>
 
-            <footer className="row-start-3 flex mt-12">
+            <footer className="flex mt-12 ">
                 <div
-                    className="fixed bottom-4 z-10 mx-auto w-fit flex gap-6 flex-wrap items-center justify-center
+                    className="fixed bottom-4 z-10 left-1/2 -translate-x-1/2 w-max flex gap-6 justify-center items-center
         border px-6 py-4 rounded-full border-amber-300 bg-amber-300"
                 >
                     <a
