@@ -10,6 +10,7 @@ import {
 } from "@radix-ui/react-icons";
 import { Calendar } from "@/components/ui/calendar";
 import { format, isToday } from "date-fns";
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
@@ -18,6 +19,18 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+
+import {
+    Drawer,
+    DrawerClose,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
+} from "@/components/ui/drawer";
+
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -113,7 +126,27 @@ export default function Home() {
                         <span className="underline underline-offset-8">
                             {event.label}
                         </span>
-                        <Checkbox className="w-6 h-6 rounded-full border-amber-500 data-[state=checked]:bg-amber-500" />
+                        <Drawer>
+                            <DrawerTrigger>
+                                <Checkbox className="w-6 h-6 rounded-full border-amber-500 data-[state=checked]:bg-amber-500" />
+                            </DrawerTrigger>
+                            <DrawerContent>
+                                <DrawerHeader>
+                                    <DrawerTitle>
+                                        Mark this schedule as done?
+                                    </DrawerTitle>
+                                    <DrawerDescription>
+                                        This action cannot be undone.
+                                    </DrawerDescription>
+                                </DrawerHeader>
+                                <DrawerFooter className="flex flex-row justify-center gap-6">
+                                    <Button className="bg-amber-500">
+                                        Proceed
+                                    </Button>
+                                    <DrawerClose>Cancel</DrawerClose>
+                                </DrawerFooter>
+                            </DrawerContent>
+                        </Drawer>
                     </CardDescription>
                     <CardTitle className="font-normal text-xl">
                         {event.title}
@@ -188,6 +221,22 @@ export default function Home() {
                         }}
                     />
                 </div>
+
+                <Drawer>
+                    <DrawerTrigger>Open</DrawerTrigger>
+                    <DrawerContent>
+                        <DrawerHeader>
+                            <DrawerTitle>Are you absolutely sure?</DrawerTitle>
+                            <DrawerDescription>
+                                This action cannot be undone.
+                            </DrawerDescription>
+                        </DrawerHeader>
+                        <DrawerFooter>
+                            <Button>Submit</Button>
+                            <DrawerClose>Cancel</DrawerClose>
+                        </DrawerFooter>
+                    </DrawerContent>
+                </Drawer>
 
                 <div className="mt-4">{events}</div>
             </main>
