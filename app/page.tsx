@@ -19,7 +19,13 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import {
     Drawer,
     DrawerClose,
@@ -32,6 +38,17 @@ import {
 } from "@/components/ui/drawer";
 
 import { useEffect, useState } from "react";
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 export default function Home() {
     const name = "Jestoni";
@@ -139,7 +156,7 @@ export default function Home() {
                                         This action cannot be undone.
                                     </DrawerDescription>
                                 </DrawerHeader>
-                                <DrawerFooter className="flex flex-row justify-center gap-6">
+                                <DrawerFooter className="flex flex-row justify-center gap-4">
                                     <Button className="bg-amber-500">
                                         Proceed
                                     </Button>
@@ -149,7 +166,85 @@ export default function Home() {
                         </Drawer>
                     </CardDescription>
                     <CardTitle className="font-normal text-xl">
-                        {event.title}
+                        <Drawer>
+                            <DrawerTrigger>{event.title}</DrawerTrigger>
+                            <DrawerContent>
+                                <DrawerHeader>
+                                    <DrawerTitle>
+                                        Update {event.title}
+                                    </DrawerTitle>
+                                    <DrawerDescription>
+                                        <form>
+                                            <div className="grid w-full max-w-sm items-center gap-1.5 mt-4">
+                                                <Label
+                                                    htmlFor="schedule"
+                                                    className="font-semibold"
+                                                >
+                                                    Schedule
+                                                </Label>
+                                                <Input
+                                                    type="text"
+                                                    id="schedule"
+                                                    placeholder="example: Regular work shift"
+                                                />
+                                            </div>
+
+                                            <div className="grid w-full max-w-sm items-center gap-1.5 mt-4">
+                                                <Label
+                                                    htmlFor="description"
+                                                    className="font-semibold"
+                                                >
+                                                    Description
+                                                </Label>
+                                                <Input
+                                                    type="text"
+                                                    id="description"
+                                                    placeholder="example: Day shift regular schedule"
+                                                />
+                                            </div>
+
+                                            <div className="grid w-full max-w-sm items-center gap-1.5 mt-4">
+                                                <Label
+                                                    htmlFor="label"
+                                                    className="font-semibold"
+                                                >
+                                                    Label
+                                                </Label>
+
+                                                <Select>
+                                                    <SelectTrigger className="w-[180px]">
+                                                        <SelectValue placeholder="Select a label" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="light">
+                                                            Day shift
+                                                        </SelectItem>
+                                                        <SelectItem value="dark">
+                                                            Night shift
+                                                        </SelectItem>
+                                                        <SelectItem value="system">
+                                                            Off
+                                                        </SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+                                            {/* Date picker */}
+                                            {/* Start time */}
+                                            {/* End time */}
+                                        </form>
+                                    </DrawerDescription>
+                                </DrawerHeader>
+                                <DrawerFooter className="flex flex-row justify-center gap-4">
+                                    <Button
+                                        type="submit"
+                                        className="bg-amber-500"
+                                    >
+                                        Save
+                                    </Button>
+                                    <DrawerClose>Cancel</DrawerClose>
+                                </DrawerFooter>
+                            </DrawerContent>
+                        </Drawer>
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="text-slate-600">
