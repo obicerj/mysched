@@ -7,8 +7,9 @@ import {
     LightningBoltIcon,
     CardStackPlusIcon,
     StarIcon,
+    CalendarIcon,
 } from "@radix-ui/react-icons";
-import { Calendar } from "@/components/ui/calendar";
+import { Calendar, CalendarProps } from "@/components/ui/calendar";
 import { format, isToday } from "date-fns";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,6 +28,11 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
+import {
     Drawer,
     DrawerClose,
     DrawerContent,
@@ -36,6 +42,15 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from "@/components/ui/drawer";
+import { useForm } from "react-hook-form";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
 
 import { useEffect, useState } from "react";
 import {
@@ -47,8 +62,10 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
+
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { TimePicker } from "@/components/time-picker/time-picker";
 
 export default function Home() {
     const name = "Jestoni";
@@ -135,6 +152,8 @@ export default function Home() {
         setSched(sortSched);
     }, []);
 
+    const form = useForm();
+
     const events = sched.map((event, id) => {
         return (
             <Card key={id} className={`mt-4 shadow-none ${event.color}`}>
@@ -166,85 +185,115 @@ export default function Home() {
                         </Drawer>
                     </CardDescription>
                     <CardTitle className="font-normal text-xl">
-                        <Drawer>
-                            <DrawerTrigger>{event.title}</DrawerTrigger>
-                            <DrawerContent>
-                                <DrawerHeader>
-                                    <DrawerTitle>
-                                        Update {event.title}
-                                    </DrawerTitle>
-                                    <DrawerDescription>
-                                        <form>
-                                            <div className="grid w-full max-w-sm items-center gap-1.5 mt-4">
-                                                <Label
-                                                    htmlFor="schedule"
-                                                    className="font-semibold"
-                                                >
-                                                    Schedule
-                                                </Label>
-                                                <Input
-                                                    type="text"
-                                                    id="schedule"
-                                                    placeholder="example: Regular work shift"
+                        <Dialog>
+                            <DialogTrigger>{event.label}</DialogTrigger>
+                            <DialogContent className="text-left">
+                                <DialogHeader>
+                                    <DialogTitle>
+                                        <div>Update {event.label}</div>
+                                    </DialogTitle>
+                                    <DialogDescription>
+                                        <Form {...form}>
+                                            <form>
+                                                <FormField
+                                                    name="title"
+                                                    control={form.control}
+                                                    render={({ field }) => (
+                                                        <FormItem className="mt-4">
+                                                            <FormLabel>
+                                                                <div>Title</div>
+                                                            </FormLabel>
+                                                            <FormControl>
+                                                                <Input
+                                                                    placeholder="e.g. Pickup day shift"
+                                                                    {...field}
+                                                                />
+                                                            </FormControl>
+                                                        </FormItem>
+                                                    )}
                                                 />
-                                            </div>
 
-                                            <div className="grid w-full max-w-sm items-center gap-1.5 mt-4">
-                                                <Label
-                                                    htmlFor="description"
-                                                    className="font-semibold"
-                                                >
-                                                    Description
-                                                </Label>
-                                                <Input
-                                                    type="text"
-                                                    id="description"
-                                                    placeholder="example: Day shift regular schedule"
+                                                <FormField
+                                                    name="description"
+                                                    control={form.control}
+                                                    render={({ field }) => (
+                                                        <FormItem className="mt-4">
+                                                            <FormLabel>
+                                                                <div>
+                                                                    Description
+                                                                </div>
+                                                            </FormLabel>
+                                                            <FormControl>
+                                                                <Input
+                                                                    placeholder="e.g. Write short description"
+                                                                    {...field}
+                                                                />
+                                                            </FormControl>
+                                                        </FormItem>
+                                                    )}
                                                 />
-                                            </div>
 
-                                            <div className="grid w-full max-w-sm items-center gap-1.5 mt-4">
-                                                <Label
-                                                    htmlFor="label"
-                                                    className="font-semibold"
+                                                <div className="flex gap-12">
+                                                    <FormField
+                                                        name="startTime"
+                                                        render={({ field }) => (
+                                                            <FormItem className="mt-4">
+                                                                <FormLabel>
+                                                                    <div>
+                                                                        Start
+                                                                        time
+                                                                    </div>
+                                                                </FormLabel>
+                                                                <FormControl>
+                                                                    <TimePicker
+                                                                        setDate={
+                                                                            field.onChange
+                                                                        }
+                                                                        date={
+                                                                            field.value
+                                                                        }
+                                                                    />
+                                                                </FormControl>
+                                                            </FormItem>
+                                                        )}
+                                                    />
+
+                                                    <FormField
+                                                        name="endtTime"
+                                                        render={({ field }) => (
+                                                            <FormItem className="mt-4">
+                                                                <FormLabel>
+                                                                    <div>
+                                                                        End time
+                                                                    </div>
+                                                                </FormLabel>
+                                                                <FormControl>
+                                                                    <TimePicker
+                                                                        setDate={
+                                                                            field.onChange
+                                                                        }
+                                                                        date={
+                                                                            field.value
+                                                                        }
+                                                                    />
+                                                                </FormControl>
+                                                            </FormItem>
+                                                        )}
+                                                    />
+                                                </div>
+
+                                                <Button
+                                                    type="submit"
+                                                    className="mt-8"
                                                 >
-                                                    Label
-                                                </Label>
-
-                                                <Select>
-                                                    <SelectTrigger className="w-[180px]">
-                                                        <SelectValue placeholder="Select a label" />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        <SelectItem value="light">
-                                                            Day shift
-                                                        </SelectItem>
-                                                        <SelectItem value="dark">
-                                                            Night shift
-                                                        </SelectItem>
-                                                        <SelectItem value="system">
-                                                            Off
-                                                        </SelectItem>
-                                                    </SelectContent>
-                                                </Select>
-                                            </div>
-                                            {/* Date picker */}
-                                            {/* Start time */}
-                                            {/* End time */}
-                                        </form>
-                                    </DrawerDescription>
-                                </DrawerHeader>
-                                <DrawerFooter className="flex flex-row justify-center gap-4">
-                                    <Button
-                                        type="submit"
-                                        className="bg-amber-500"
-                                    >
-                                        Save
-                                    </Button>
-                                    <DrawerClose>Cancel</DrawerClose>
-                                </DrawerFooter>
-                            </DrawerContent>
-                        </Drawer>
+                                                    Update
+                                                </Button>
+                                            </form>
+                                        </Form>
+                                    </DialogDescription>
+                                </DialogHeader>
+                            </DialogContent>
+                        </Dialog>
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="text-slate-600">
