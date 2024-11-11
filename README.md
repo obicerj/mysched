@@ -1,12 +1,13 @@
 ### TO DO LIST
 
 -   add menu nav bar
--   add button for sched (done, delete, edit)
+-   add button for sched (delete, edit) when clicked on sched card show edit form
 -   create forms for (create, edit)
+-   add calender on update and create form
 
--   setup database storage
--   add features functions
--   fix view for desktop
+-   setup database for storage
+-   add functions
+-   add desktop view
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
