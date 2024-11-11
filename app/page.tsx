@@ -159,9 +159,9 @@ export default function Home() {
             <Card key={id} className={`mt-4 shadow-none ${event.color}`}>
                 <CardHeader>
                     <CardDescription className="flex text-slate-600 justify-between">
-                        <span className="underline underline-offset-8">
+                        <Label className="underline underline-offset-8">
                             {event.label}
-                        </span>
+                        </Label>
                         <Drawer>
                             <DrawerTrigger asChild>
                                 <Checkbox className="w-6 h-6 rounded-full border-amber-500 data-[state=checked]:bg-amber-500" />
@@ -186,111 +186,99 @@ export default function Home() {
                     </CardDescription>
                     <CardTitle className="font-normal text-xl">
                         <Dialog>
-                            <DialogTrigger>{event.label}</DialogTrigger>
+                            <DialogTrigger>{event.title}</DialogTrigger>
                             <DialogContent className="text-left">
                                 <DialogHeader>
                                     <DialogTitle>
-                                        <div>Update {event.label}</div>
+                                        Update {event.title}
                                     </DialogTitle>
-                                    <DialogDescription>
-                                        <Form {...form}>
-                                            <form>
-                                                <FormField
-                                                    name="title"
-                                                    control={form.control}
-                                                    render={({ field }) => (
-                                                        <FormItem className="mt-4">
-                                                            <FormLabel>
-                                                                <div>Title</div>
-                                                            </FormLabel>
-                                                            <FormControl>
-                                                                <Input
-                                                                    placeholder="e.g. Pickup day shift"
-                                                                    {...field}
-                                                                />
-                                                            </FormControl>
-                                                        </FormItem>
-                                                    )}
-                                                />
+                                    {/* <DialogDescription> */}
+                                    <Form {...form}>
+                                        {/* <form> */}
+                                        <FormField
+                                            name="title"
+                                            control={form.control}
+                                            render={({ field }) => (
+                                                <FormItem className="text-left mt-4">
+                                                    <FormLabel>Title</FormLabel>
+                                                    <FormControl>
+                                                        <Input
+                                                            placeholder="e.g. Pickup day shift"
+                                                            {...field}
+                                                        />
+                                                    </FormControl>
+                                                </FormItem>
+                                            )}
+                                        />
 
-                                                <FormField
-                                                    name="description"
-                                                    control={form.control}
-                                                    render={({ field }) => (
-                                                        <FormItem className="mt-4">
-                                                            <FormLabel>
-                                                                <div>
-                                                                    Description
-                                                                </div>
-                                                            </FormLabel>
-                                                            <FormControl>
-                                                                <Input
-                                                                    placeholder="e.g. Write short description"
-                                                                    {...field}
-                                                                />
-                                                            </FormControl>
-                                                        </FormItem>
-                                                    )}
-                                                />
+                                        <FormField
+                                            name="description"
+                                            control={form.control}
+                                            render={({ field }) => (
+                                                <FormItem className="text-left mt-4">
+                                                    <FormLabel>
+                                                        Description
+                                                    </FormLabel>
+                                                    <FormControl>
+                                                        <Input
+                                                            placeholder="e.g. Write short description"
+                                                            {...field}
+                                                        />
+                                                    </FormControl>
+                                                </FormItem>
+                                            )}
+                                        />
 
-                                                <div className="flex gap-12">
-                                                    <FormField
-                                                        name="startTime"
-                                                        render={({ field }) => (
-                                                            <FormItem className="mt-4">
-                                                                <FormLabel>
-                                                                    <div>
-                                                                        Start
-                                                                        time
-                                                                    </div>
-                                                                </FormLabel>
-                                                                <FormControl>
-                                                                    <TimePicker
-                                                                        setDate={
-                                                                            field.onChange
-                                                                        }
-                                                                        date={
-                                                                            field.value
-                                                                        }
-                                                                    />
-                                                                </FormControl>
-                                                            </FormItem>
-                                                        )}
-                                                    />
+                                        <div className="flex gap-12 pb-8">
+                                            <FormField
+                                                name="startTime"
+                                                render={({ field }) => (
+                                                    <FormItem className="text-left mt-4">
+                                                        <FormLabel>
+                                                            Start time
+                                                        </FormLabel>
+                                                        <FormControl>
+                                                            <TimePicker
+                                                                setDate={
+                                                                    field.onChange
+                                                                }
+                                                                date={
+                                                                    field.value
+                                                                }
+                                                            />
+                                                        </FormControl>
+                                                    </FormItem>
+                                                )}
+                                            />
 
-                                                    <FormField
-                                                        name="endtTime"
-                                                        render={({ field }) => (
-                                                            <FormItem className="mt-4">
-                                                                <FormLabel>
-                                                                    <div>
-                                                                        End time
-                                                                    </div>
-                                                                </FormLabel>
-                                                                <FormControl>
-                                                                    <TimePicker
-                                                                        setDate={
-                                                                            field.onChange
-                                                                        }
-                                                                        date={
-                                                                            field.value
-                                                                        }
-                                                                    />
-                                                                </FormControl>
-                                                            </FormItem>
-                                                        )}
-                                                    />
-                                                </div>
+                                            <FormField
+                                                name="endtTime"
+                                                render={({ field }) => (
+                                                    <FormItem className="text-left mt-4">
+                                                        <FormLabel>
+                                                            End time
+                                                        </FormLabel>
+                                                        <FormControl>
+                                                            <TimePicker
+                                                                setDate={
+                                                                    field.onChange
+                                                                }
+                                                                date={
+                                                                    field.value
+                                                                }
+                                                            />
+                                                        </FormControl>
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </div>
 
-                                                <Button
-                                                    type="submit"
-                                                    className="mt-8"
-                                                >
-                                                    Update
-                                                </Button>
-                                            </form>
-                                        </Form>
-                                    </DialogDescription>
+                                        <Button type="submit" className="mt-4">
+                                            Update
+                                        </Button>
+                                        {/* </form> */}
+                                    </Form>
+                                    {/* </DialogDescription> */}
                                 </DialogHeader>
                             </DialogContent>
                         </Dialog>
