@@ -42,6 +42,7 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from "@/components/ui/drawer";
+
 import { useForm } from "react-hook-form";
 import {
     Dialog,
@@ -67,6 +68,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { TimePicker } from "@/components/time-picker/time-picker";
+import { DatePicker } from "@/components/date-picker/date-picker";
 
 export default function Home() {
     const name = "Jestoni";
@@ -225,6 +227,20 @@ export default function Home() {
                                                             placeholder="e.g. Write short description"
                                                             {...field}
                                                         />
+                                                    </FormControl>
+                                                </FormItem>
+                                            )}
+                                        />
+
+                                        <FormField
+                                            name="date"
+                                            render={(field) => (
+                                                <FormItem className="flex flex-col text-left mt-4 pt-4">
+                                                    <FormLabel>
+                                                        Schedule Date
+                                                    </FormLabel>
+                                                    <FormControl>
+                                                        <DatePicker />
                                                     </FormControl>
                                                 </FormItem>
                                             )}
@@ -424,6 +440,20 @@ export default function Home() {
                                                         placeholder="e.g. Write short description"
                                                         {...field}
                                                     />
+                                                </FormControl>
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    <FormField
+                                        name="date"
+                                        render={(field) => (
+                                            <FormItem className="flex flex-col text-left mt-4 pt-4">
+                                                <FormLabel>
+                                                    Schedule Date
+                                                </FormLabel>
+                                                <FormControl>
+                                                    <DatePicker />
                                                 </FormControl>
                                             </FormItem>
                                         )}
