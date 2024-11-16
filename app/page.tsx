@@ -68,6 +68,7 @@ import { Input } from "@/components/ui/input";
 import { TimePicker } from "@/components/time-picker/time-picker";
 import { DatePicker } from "@/components/date-picker/date-picker";
 import { Header } from "@/components/header/header";
+import { Summary } from "@/components/sched-summary/summary";
 
 export default function Home() {
     const name = "Jestoni";
@@ -324,37 +325,9 @@ export default function Home() {
     return (
         <div className="p-4 text-slate-800 font-[family-name:var(--font-geist-sans)]">
             <main>
-                {/* <div className="flex justify-between">
-                    <Avatar className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full">
-                        <AvatarImage src="https://avatars.githubusercontent.com/u/10084955?v=4" />
-                        <AvatarFallback>JO</AvatarFallback>
-                    </Avatar>
-                    <p className="font-semibold text-sm text-right">
-                        {format(new Date(), "do MMMM")} <br />
-                        {format(new Date(), "Y")}
-                    </p>
-                </div> */}
                 <Header />
 
-                <div className="mt-8">
-                    <p className="text-xl text-slate-700 font-semibold">
-                        Hello {name},
-                    </p>
-                    <h1 className="text-4xl font-bold">
-                        <span>You have</span>
-                        {/* num of event */}
-                        <span className="text-amber-500">
-                            &nbsp;{totalSchedToday}&nbsp;
-                        </span>
-                        {/* event label */}
-                        <span className="text-amber-500">schedule</span>
-                        <br />
-                        <span>waiting for you today.</span>
-                    </h1>
-                    {/* if none
-        Have a good day, {name} wave
-        */}
-                </div>
+                <Summary name={name} totalSchedToday={totalSchedToday} />
 
                 {/* fullscreen flex-1 h-[650px] w-full */}
                 <div className="mt-6">
