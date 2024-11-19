@@ -69,6 +69,7 @@ import { DatePicker } from "@/components/date-picker/date-picker";
 import { Header } from "@/components/header/header";
 import { Summary } from "@/components/sched-summary/summary";
 import { SummaryCalendar } from "@/components/sched-summary/summary-calendar";
+import { DailySched } from "@/components/sched-summary/daily-sched";
 
 export default function Home() {
     const name = "Jestoni";
@@ -331,7 +332,7 @@ export default function Home() {
 
                 <SummaryCalendar />
 
-                <div className="mt-4">{events}</div>
+                <DailySched events={events} />
             </main>
 
             <footer className="flex mt-12 ">
