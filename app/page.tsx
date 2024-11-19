@@ -7,7 +7,6 @@ import {
     StarIcon,
     CalendarIcon,
 } from "@radix-ui/react-icons";
-import { Calendar, CalendarProps } from "@/components/ui/calendar";
 import { format, isToday } from "date-fns";
 import { Button } from "@/components/ui/button";
 import {
@@ -69,6 +68,7 @@ import { TimePicker } from "@/components/time-picker/time-picker";
 import { DatePicker } from "@/components/date-picker/date-picker";
 import { Header } from "@/components/header/header";
 import { Summary } from "@/components/sched-summary/summary";
+import { SummaryCalendar } from "@/components/sched-summary/summary-calendar";
 
 export default function Home() {
     const name = "Jestoni";
@@ -329,23 +329,7 @@ export default function Home() {
 
                 <Summary name={name} totalSchedToday={totalSchedToday} />
 
-                {/* fullscreen flex-1 h-[650px] w-full */}
-                <div className="mt-6">
-                    {/* 
-        selected={date}
-        onSelect={setDate} */}
-                    <Calendar
-                        mode="single"
-                        className="h-full w-full flex"
-                        classNames={{
-                            months: "flex w-full flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0 flex-1",
-                            month: "space-y-4 w-full flex flex-col",
-                            table: "w-full h-full border-collapse space-y-1",
-                            head_row: "",
-                            row: "w-full mt-2",
-                        }}
-                    />
-                </div>
+                <SummaryCalendar />
 
                 <div className="mt-4">{events}</div>
             </main>
