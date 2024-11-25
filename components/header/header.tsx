@@ -10,7 +10,7 @@ export function Header() {
             </Avatar>
             <p className="font-semibold text-sm text-right">
                 {format(new Date(), "do MMMM")} <br />
-                {format(new Date(), "Y")}
+                {format(new Date(), "y")}
             </p>
         </div>
     );
