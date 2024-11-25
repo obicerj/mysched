@@ -1,5 +1,6 @@
 "use client";
 
+import axios from "axios";
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { format, isToday } from "date-fns";
@@ -104,57 +105,74 @@ export default function Home() {
         title: string;
         description: string;
         date: string;
-        start: string;
-        end: string;
+        start_time: string;
+        end_time: string;
     }
 
-    const eventsDummy: Event[] = [
-        {
-            label: "Work",
-            color: "bg-amber-100",
-            title: "Night shift",
-            description: "Regular work shift",
-            date: "2024-11-02T00:00:00",
-            start: "2024-11-02T16:00:00",
-            end: "2024-11-02T20:00:00",
-        },
-        {
-            label: "Work",
-            color: "bg-blue-100",
-            title: "Day shift",
-            description: "Regular work shift",
-            date: "2024-11-02T00:00:00",
-            start: "2024-11-02T08:00:00",
-            end: "2024-11-02T15:00:00",
-        },
-        {
-            label: "Sideline",
-            color: "bg-red-100",
-            title: "Extra job",
-            description: "Extra work shift",
-            date: "2024-11-02T00:00:00",
-            start: "2024-11-02T06:00:00",
-            end: "2024-11-02T06:30:00",
-        },
-    ];
+    // const eventsDummy: Event[] = [
+    //     {
+    //         label: "Work",
+    //         color: "bg-amber-100",
+    //         title: "Night shift",
+    //         description: "Regular work shift",
+    //         date: "2024-11-02T00:00:00",
+    //         start: "2024-11-02T16:00:00",
+    //         end: "2024-11-02T20:00:00",
+    //     },
+    //     {
+    //         label: "Work",
+    //         color: "bg-blue-100",
+    //         title: "Day shift",
+    //         description: "Regular work shift",
+    //         date: "2024-11-02T00:00:00",
+    //         start: "2024-11-02T08:00:00",
+    //         end: "2024-11-02T15:00:00",
+    //     },
+    //     {
+    //         label: "Sideline",
+    //         color: "bg-red-100",
+    //         title: "Extra job",
+    //         description: "Extra work shift",
+    //         date: "2024-11-02T00:00:00",
+    //         start: "2024-11-02T06:00:00",
+    //         end: "2024-11-02T06:30:00",
+    //     },
+    // ];
 
-    const totalSchedToday = eventsDummy.reduce((count, sched) => {
-        return isToday(sched.start) ? count + 1 : count;
-    }, 0);
-
-    const [sched, setSched] = useState(eventsDummy);
+    const [mySchedule, setMySchedule] = useState([]);
 
     useEffect(() => {
-        // Sort events by start time
-        const sortSched = eventsDummy.sort(
-            (a, b) => new Date(a.start).getTime() - new Date(b.start).getTime()
+        axios
+            .get("/api/mysql/schedule")
+            .then(function (response) {
+                setMySchedule(response.data);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }, []);
+
+    const schedule: Event[] = mySchedule;
+
+    const totalSchedToday = schedule.reduce((count, sched) => {
+        return isToday(sched.date) ? count + 1 : count;
+    }, 0);
+
+    const [schedToday, setSchedToday] = useState(schedule);
+
+    useEffect(() => {
+        // Sort sched by start time
+        const sortSched = schedule.sort(
+            (a, b) =>
+                new Date(a.start_time).getTime() -
+                new Date(b.start_time).getTime()
         );
-        setSched(sortSched);
+        setSchedToday(sortSched);
     }, []);
 
     const form = useForm();
 
-    const events = sched.map((event, id) => {
+    const events = schedule.map((event, id) => {
         return (
             <Card key={id} className={`mt-4 shadow-none ${event.color}`}>
                 <CardHeader>
@@ -310,9 +328,9 @@ export default function Home() {
                     </p>
                     <br />
                     <p className="space-x-1 text-slate-600">
-                        <span>{format(event.start, "h:mma")}</span>
+                        <span>{format(event.start_time, "h:mma")}</span>
                         <span> - </span>
-                        <span>{format(event.end, "h:mma")}</span>
+                        <span>{format(event.end_time, "h:mma")}</span>
                     </p>
                 </CardFooter>
             </Card>
