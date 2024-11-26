@@ -332,12 +332,15 @@ export default function Home() {
         <div className="p-4 text-slate-800 font-[family-name:var(--font-geist-sans)]">
             <main>
                 <Header />
-
                 <Summary name={name} totalSchedToday={totalSchedToday} />
-
                 <SummaryCalendar />
-
-                <DailySched events={events} />
+                {mySchedule.length ? (
+                    <DailySched events={events} />
+                ) : (
+                    <p className="text-center my-8 text-3xl text-slate-300 font-bold">
+                        You're free today
+                    </p>
+                )}
             </main>
 
             <FooterNav />

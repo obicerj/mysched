@@ -13,7 +13,11 @@ export function Summary({ ...props }) {
                 {/* event label */}
                 <span className="text-amber-500">schedule</span>
                 <br />
-                <span>waiting for you today.</span>
+                {props.length ? (
+                    <span>waiting for you today.</span>
+                ) : (
+                    <span>have a wonderful day.</span>
+                )}
             </h1>
             {/* if none
         Have a good day, {name} wave
