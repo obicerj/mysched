@@ -109,36 +109,6 @@ export default function Home() {
         end_time: string;
     }
 
-    // const eventsDummy: Event[] = [
-    //     {
-    //         label: "Work",
-    //         color: "bg-amber-100",
-    //         title: "Night shift",
-    //         description: "Regular work shift",
-    //         date: "2024-11-02T00:00:00",
-    //         start: "2024-11-02T16:00:00",
-    //         end: "2024-11-02T20:00:00",
-    //     },
-    //     {
-    //         label: "Work",
-    //         color: "bg-blue-100",
-    //         title: "Day shift",
-    //         description: "Regular work shift",
-    //         date: "2024-11-02T00:00:00",
-    //         start: "2024-11-02T08:00:00",
-    //         end: "2024-11-02T15:00:00",
-    //     },
-    //     {
-    //         label: "Sideline",
-    //         color: "bg-red-100",
-    //         title: "Extra job",
-    //         description: "Extra work shift",
-    //         date: "2024-11-02T00:00:00",
-    //         start: "2024-11-02T06:00:00",
-    //         end: "2024-11-02T06:30:00",
-    //     },
-    // ];
-
     const [mySchedule, setMySchedule] = useState<Schedule[]>([]);
 
     useEffect(() => {
