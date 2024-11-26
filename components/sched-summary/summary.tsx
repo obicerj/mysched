@@ -6,22 +6,18 @@ export function Summary({ ...props }) {
             </p>
             <h1 className="text-4xl font-bold">
                 <span>You have</span>
-                {/* num of event */}
+                {/* total schedule */}
                 <span className="text-amber-500">
                     &nbsp;{props.totalSchedToday}&nbsp;
                 </span>
-                {/* event label */}
                 <span className="text-amber-500">schedule</span>
                 <br />
-                {props.length ? (
+                {props.totalSchedToday ? (
                     <span>waiting for you today.</span>
                 ) : (
                     <span>have a wonderful day.</span>
                 )}
             </h1>
-            {/* if none
-        Have a good day, {name} wave
-        */}
         </div>
     );
 }
