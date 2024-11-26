@@ -15,7 +15,7 @@ export async function GET(request: Request) {
         // create query to fetch data
         let get_exp_query = '';
 
-        get_exp_query = 'SELECT * FROM mysched.schedules';
+        get_exp_query = `SELECT * FROM mysched.schedules WHERE DATE(date) = CURRENT_DATE`;
 
         // pass parameters to the sql query
 
