@@ -47,7 +47,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Form,
     FormControl,
@@ -111,29 +111,55 @@ export default function Home() {
 
     const [mySchedule, setMySchedule] = useState<Schedule[]>([]);
 
+    const [fetchDate, setFetchDate] = useState<string>("");
+
+    const getDate = (selectedDate: string) => {
+        setFetchDate(selectedDate);
+    };
+
     useEffect(() => {
-        axios
-            .get("/api/mysql/schedule")
-            .then((res) => {
+        // Skip fetching if fetchDate is not set
+        // console.log(fetchDate);
+        // if (!fetchDate);
+
+        const pickDate = fetchDate
+            ? fetchDate
+            : format(new Date(), "yyyy-MM-dd");
+
+        // console.log(pickDate);
+
+        const fetchSchedules = async () => {
+            try {
+                const res = await axios.get(`/api/schedule/date/${pickDate}`);
                 setMySchedule(res.data);
-            })
-            .catch((e) => {
-                console.error("Error fetching schedules:", e);
-            });
-    }, []);
+            } catch (e) {
+                console.error("Error fetching schedules:", e.message);
+            }
+        };
+        // axios
+        //     .get(`/api/schedule/date/${fetchDate}`)
+        //     .then((res) => {
+        //         setMySchedule(res.data);
+        //     })
+        //     .catch((e) => {
+        //         console.error("Error fetching schedules:", e.message);
+        //     });
+        fetchSchedules();
+    }, [fetchDate]);
 
     const sortedSched = mySchedule.sort(
         (a, b) =>
             new Date(a.start_time).getTime() - new Date(b.start_time).getTime()
     );
 
-    const totalSchedToday = mySchedule.reduce((count, sched) => {
-        return isToday(sched.date) ? count + 1 : count;
-    }, 0);
+    // const totalSchedToday = mySchedule.reduce((count, sched) => {
+    //     return isToday(sched.date) ? count + 1 : count;
+    // }, 0);
+    const totalSchedToday = mySchedule.length;
 
     const form = useForm();
 
-    const events = sortedSched.map((event, id) => {
+    const daySched = sortedSched.map((event, id) => {
         return (
             <Card key={id} className={`mt-4 shadow-none ${event.color}`}>
                 <CardHeader>
@@ -303,12 +329,12 @@ export default function Home() {
             <main>
                 <Header />
                 <Summary name={name} totalSchedToday={totalSchedToday} />
-                <SummaryCalendar />
+                <SummaryCalendar fetchSelectedDate={getDate} />
                 {mySchedule.length ? (
-                    <DailySched events={events} />
+                    <DailySched daySched={daySched} />
                 ) : (
-                    <p className="text-center my-8 text-3xl text-slate-300 font-bold">
-                        You're free today
+                    <p className="text-center mt-14 mb-32 text-3xl text-slate-300 font-bold">
+                        Your schedule is empty
                     </p>
                 )}
             </main>

@@ -1,12 +1,30 @@
 import { Calendar, CalendarProps } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import React, { useEffect, useState } from "react";
 
-export function SummaryCalendar() {
+interface SummaryCalendarProps {
+    fetchSelectedDate: (date: string) => void;
+}
+
+export function SummaryCalendar({ fetchSelectedDate }: SummaryCalendarProps) {
+    const [date, setDate] = React.useState<Date | undefined>(new Date());
+
+    // format(date, "yyyy-MM-dd HH:mm:ss")
+    // fetchSelectedDate(format(date, "yyyy-MM-dd HH:mm:ss"));
+
+    useEffect(() => {
+        if (date) {
+            fetchSelectedDate(format(date, "yyyy-MM-dd HH:mm:ss"));
+        }
+    }, [date, fetchSelectedDate]);
+
+    // console.log(date);
+
     return (
         <div className="mt-6">
-            {/* 
-        selected={date}
-        onSelect={setDate} */}
             <Calendar
+                selected={date}
+                onSelect={setDate}
                 mode="single"
                 className="h-full w-full flex"
                 classNames={{
