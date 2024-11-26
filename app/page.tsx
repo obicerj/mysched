@@ -315,7 +315,7 @@ export default function Home() {
                 </CardContent>
                 <CardFooter className="justify-between">
                     <p className="text-slate-600">
-                        {format(event.date, "dd MMMM z")}
+                        {format(event.date, "dd MMMM")}
                     </p>
                     <br />
                     <p className="space-x-1 text-slate-600">
