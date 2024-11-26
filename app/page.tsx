@@ -99,7 +99,7 @@ export default function Home() {
     const monthName = months[today.getMonth()];
     const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-    interface Event {
+    interface Schedule {
         label: string;
         color: string;
         title: string;
@@ -139,40 +139,31 @@ export default function Home() {
     //     },
     // ];
 
-    const [mySchedule, setMySchedule] = useState([]);
+    const [mySchedule, setMySchedule] = useState<Schedule[]>([]);
 
     useEffect(() => {
         axios
             .get("/api/mysql/schedule")
-            .then(function (response) {
-                setMySchedule(response.data);
+            .then((res) => {
+                setMySchedule(res.data);
             })
-            .catch(function (error) {
-                console.log(error);
+            .catch((e) => {
+                console.error("Error fetching schedules:", e);
             });
     }, []);
 
-    const schedule: Event[] = mySchedule;
+    const sortedSched = mySchedule.sort(
+        (a, b) =>
+            new Date(a.start_time).getTime() - new Date(b.start_time).getTime()
+    );
 
-    const totalSchedToday = schedule.reduce((count, sched) => {
+    const totalSchedToday = mySchedule.reduce((count, sched) => {
         return isToday(sched.date) ? count + 1 : count;
     }, 0);
 
-    const [schedToday, setSchedToday] = useState(schedule);
-
-    useEffect(() => {
-        // Sort sched by start time
-        const sortSched = schedule.sort(
-            (a, b) =>
-                new Date(a.start_time).getTime() -
-                new Date(b.start_time).getTime()
-        );
-        setSchedToday(sortSched);
-    }, []);
-
     const form = useForm();
 
-    const events = schedule.map((event, id) => {
+    const events = sortedSched.map((event, id) => {
         return (
             <Card key={id} className={`mt-4 shadow-none ${event.color}`}>
                 <CardHeader>
