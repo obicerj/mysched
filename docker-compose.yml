@@ -5,7 +5,7 @@ services:
     environment:
       MYSQL_ROOT_USER: "root"
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
-      TZ: "Canada/Ontario"
+      TZ: "America/New_York"
       tty: true
     ports:
         - 3306:3306
