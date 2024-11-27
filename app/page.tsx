@@ -133,7 +133,7 @@ export default function Home() {
                 const res = await axios.get(`/api/schedule/date/${pickDate}`);
                 setMySchedule(res.data);
             } catch (e) {
-                console.error("Error fetching schedules:", e.message);
+                console.error("Error fetching schedules:", e);
             }
         };
         // axios
