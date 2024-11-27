@@ -118,15 +118,9 @@ export default function Home() {
     };
 
     useEffect(() => {
-        // Skip fetching if fetchDate is not set
-        // console.log(fetchDate);
-        // if (!fetchDate);
-
         const pickDate = fetchDate
             ? fetchDate
             : format(new Date(), "yyyy-MM-dd");
-
-        // console.log(pickDate);
 
         const fetchSchedules = async () => {
             try {
@@ -136,14 +130,6 @@ export default function Home() {
                 console.error("Error fetching schedules:", e);
             }
         };
-        // axios
-        //     .get(`/api/schedule/date/${fetchDate}`)
-        //     .then((res) => {
-        //         setMySchedule(res.data);
-        //     })
-        //     .catch((e) => {
-        //         console.error("Error fetching schedules:", e.message);
-        //     });
         fetchSchedules();
     }, [fetchDate]);
 
@@ -152,9 +138,6 @@ export default function Home() {
             new Date(a.start_time).getTime() - new Date(b.start_time).getTime()
     );
 
-    // const totalSchedToday = mySchedule.reduce((count, sched) => {
-    //     return isToday(sched.date) ? count + 1 : count;
-    // }, 0);
     const totalSchedToday = mySchedule.length;
 
     const form = useForm();
