@@ -9,18 +9,16 @@ let connectionParams = GetDBSettings();
 
 export async function GET(request: Request,  { params }: { params: { slug: string } }) {
     
-    // sched id
-    // const {params} = context;
-    
     try {
+        const { slug } = await params;
+
         // Ensure params and slug are available
-        if (!params?.slug) {
+        if (!slug) {
             return NextResponse.json(
-                { error: "Slug parameter is required." },
+                { error: "Date parameter is required." },
                 { status: 400 }
             );
         }
-        const slug = params.slug;
 
         // connect to db
         const db = await mysql.createConnection(connectionParams);
