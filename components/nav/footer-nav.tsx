@@ -42,18 +42,26 @@ import { Calendar } from "../ui/calendar";
 import { format } from "date-fns";
 
 export function FooterNav() {
-    const [formData, setFormData] = useState({
-        title: "",
-        label: "",
-        color: "",
-        description: "",
-        date: "",
-        start_time: "",
-        end_time: "",
-    });
+    // const [formData, setFormData] = useState({
+    //     title: "",
+    //     label: "",
+    //     color: "",
+    //     description: "",
+    //     date: "",
+    //     start_time: "",
+    //     end_time: "",
+    // });
+
+    // manage dialog open/close state
+    const [dialogOpen, setDialogOpen] = useState(false);
+
+    const [responseMessage, setResponseMessage] = useState("");
+
+    // track list updates
+    const [listUpdated, setListUpdated] = useState(false);
 
     const formSchema = z.object({
-        title: z.string(),
+        title: z.string().min(1, "Title is required"),
         label: z.string(),
         color: z.string(),
         description: z.string(),
@@ -61,8 +69,6 @@ export function FooterNav() {
         start_time: z.date(),
         end_time: z.date(),
     });
-
-    const [responseMessage, setResponseMessage] = useState("");
 
     // update state for any form field
     // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,6 +98,14 @@ export function FooterNav() {
             // send data to the API
             const response = await axios.post("/api/schedule", values);
             setResponseMessage("Schedule added successfully!");
+
+            // close dialog and reset the form
+            setDialogOpen(false);
+            form.reset();
+
+            // notify parent to update the list
+            // trigger list refresh
+            setListUpdated(true);
         } catch (error: any) {
             // handle error
             setResponseMessage(
@@ -115,7 +129,7 @@ export function FooterNav() {
                     Dashboard
                 </a>
 
-                <Dialog>
+                <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                     <DialogTrigger className="flex items-center gap-2">
                         <CardStackPlusIcon />
                         <span className="hover:underline hover:underline-offset-4">
