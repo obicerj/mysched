@@ -100,6 +100,7 @@ export default function Home() {
     const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
     interface Schedule {
+        id: number;
         label: string;
         color: string;
         title: string;
@@ -152,6 +153,21 @@ export default function Home() {
 
     const totalSchedToday = mySchedule.length;
 
+    const [deleteOpen, setDeleteOpen] = useState<Record<number, boolean>>({});
+
+    const deleteSchedule = async (scheduleId: number) => {
+        try {
+            const res = await axios.delete("/api/schedule", {
+                params: { id: scheduleId },
+            });
+
+            // setDeleteOpen(false);
+            updateScheduleList();
+        } catch (e) {
+            console.error("Error deleting schedule:");
+        }
+    };
+
     const form = useForm();
 
     const daySched = sortedSched.map((event, id) => {
@@ -162,22 +178,34 @@ export default function Home() {
                         <Label className="underline underline-offset-8">
                             {event.label}
                         </Label>
-                        <Drawer>
+                        <Drawer
+                            open={deleteOpen[event.id] || false}
+                            onOpenChange={(isOpen) =>
+                                setDeleteOpen((prev) => ({
+                                    ...prev,
+                                    [event.id]: isOpen,
+                                }))
+                            }
+                        >
                             <DrawerTrigger asChild>
                                 <Checkbox className="w-6 h-6 rounded-full border-amber-500 data-[state=checked]:bg-amber-500" />
                             </DrawerTrigger>
                             <DrawerContent>
                                 <DrawerHeader>
                                     <DrawerTitle>
-                                        Mark this schedule as done?
+                                        Mark this schedule ({event.title}) as
+                                        done?
                                     </DrawerTitle>
                                     <DrawerDescription>
                                         This action cannot be undone.
                                     </DrawerDescription>
                                 </DrawerHeader>
                                 <DrawerFooter className="flex flex-row justify-center gap-4">
-                                    <Button className="bg-amber-500">
-                                        Proceed
+                                    <Button
+                                        onClick={() => deleteSchedule(event.id)}
+                                        className="bg-amber-500"
+                                    >
+                                        Delete
                                     </Button>
                                     <DrawerClose>Cancel</DrawerClose>
                                 </DrawerFooter>

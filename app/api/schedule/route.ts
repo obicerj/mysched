@@ -65,3 +65,46 @@ export async function POST(request: Request) {
         )
     }
 } 
+
+export async function DELETE(request: NextRequest) {
+    try {
+        // get ID from request query string
+        const { searchParams } = new URL(request.url);
+        const id = searchParams.get("id");
+
+        if (!id) {
+            return NextResponse.json(
+                {error: "Schedule ID is required."},
+                {status: 400}
+            );
+        }
+
+        // connect to db
+        console.log("Connecting to the database for deletion...");
+        const db = await mysql.createConnection(connectionParams);
+        console.log("Database connected.");
+
+        // execute delete query
+        const query = `DELETE FROM mysched.schedules WHERE id = ?`;
+        const [result] = await db.execute(query, [id]);
+
+        // close db connection
+        await db.end();
+
+        if (!result) {
+            return NextResponse.json(
+                { error: "No schedule found with the specified ID." },
+                { status: 404 }
+            );
+        }
+
+        console.log(`Schedule with ID ${id} deleted successfully`);
+        return NextResponse.json({ success: true });
+    } catch (e) {
+        console.error("Error deleting schedule:", e);
+        return NextResponse.json(
+            { error: "An error occurred while deleting the schedule." },
+            { status: 500 }
+        );
+    }
+}

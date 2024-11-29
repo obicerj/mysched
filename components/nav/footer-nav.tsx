@@ -75,7 +75,7 @@ export function FooterNav({ listUpdated }: { listUpdated: () => void }) {
         try {
             // send data to the API
             const response = await axios.post("/api/schedule", values);
-            setResponseMessage("Schedule added successfully!");
+            // setResponseMessage("Schedule added successfully!");
 
             // close dialog and reset the form
             setDialogOpen(false);
