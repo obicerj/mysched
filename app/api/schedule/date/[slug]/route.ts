@@ -26,7 +26,6 @@ export async function GET(request: Request,  { params }: { params: { slug: strin
         // create query to fetch data
         const query = 'SELECT * FROM mysched.schedules WHERE DATE(date) = DATE(?)';
         
-
         // pass parameters to the sql query
         const [results] = await db.execute(query, [slug])
 

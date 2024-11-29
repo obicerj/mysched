@@ -1,3 +1,8 @@
+"use client";
+
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import {
     LightningBoltIcon,
     CardStackPlusIcon,
@@ -30,9 +35,100 @@ import { DatePicker } from "@/components/date-picker/date-picker";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import { useRef, useState } from "react";
+import axios from "axios";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Calendar } from "../ui/calendar";
+import { format } from "date-fns";
 
 export function FooterNav() {
-    const form = useForm();
+    const [formData, setFormData] = useState({
+        title: "",
+        label: "",
+        color: "",
+        description: "",
+        date: "",
+        start_time: "",
+        end_time: "",
+    });
+
+    const formSchema = z.object({
+        title: z.string(),
+        label: z.string(),
+        color: z.string(),
+        description: z.string(),
+        date: z.date(),
+        start_time: z.date(),
+        end_time: z.date(),
+    });
+
+    const [responseMessage, setResponseMessage] = useState("");
+
+    // update state for any form field
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData((prevState) => ({
+            ...prevState,
+            [name]: value,
+        }));
+    };
+
+    // set default values
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            title: "",
+            label: "work",
+            color: "bg-red-100",
+            description: "",
+            date: undefined,
+            start_time: undefined,
+            end_time: undefined,
+        },
+    });
+
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        console.log("resulta", values);
+        try {
+            // send data to the API
+            const response = await axios.post("/api/schedule", values);
+            setResponseMessage("Schedule added successfully!");
+        } catch (error: any) {
+            // handle error
+            setResponseMessage(
+                error.response?.data?.error || "An error occurred."
+            );
+        }
+    };
+
+    // const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    //     console.log(JSON.stringify(data, null, 2));
+
+    //     try {
+    //         // send data to the API
+    //         await axios.post("/api/schedule", data);
+    //         setResponseMessage("Schedule added successfully!");
+    //     } catch (error: any) {
+    //         // handle error
+    //         setResponseMessage(
+    //             error.response?.data?.error || "An error occurred."
+    //         );
+    //     }
+    // };
+
+    //     e.preventDefault();
+    //     console.log("resulta", values);
+    //     try {
+    //         // send data to the API
+    //         const response = await axios.post("/api/schedule", formData);
+    //         setResponseMessage("Schedule added successfully!");
+    //     } catch (error: any) {
+    //         // handle error
+    //         setResponseMessage(
+    //             error.response?.data?.error || "An error occurred."
+    //         );
+    //     }
+    // };
 
     return (
         <nav className="flex mt-12 ">
@@ -56,6 +152,7 @@ export function FooterNav() {
                         <CardStackPlusIcon />
                         Create Schedule
                     </a> */}
+
                 <Dialog>
                     <DialogTrigger className="flex items-center gap-2">
                         <CardStackPlusIcon />
@@ -66,14 +163,15 @@ export function FooterNav() {
                     <DialogContent className="text-left">
                         <DialogHeader>
                             <DialogTitle>Create Schedule</DialogTitle>
-                            {/* <DialogDescription> */}
-                            <Form {...form}>
-                                {/* <form> */}
+                            <DialogDescription></DialogDescription>
+                        </DialogHeader>
+                        <Form {...form}>
+                            <form onSubmit={form.handleSubmit(onSubmit)}>
                                 <FormField
                                     name="title"
                                     control={form.control}
                                     render={({ field }) => (
-                                        <FormItem className="text-left mt-4 pt-4">
+                                        <FormItem className="text-left mt-4">
                                             <FormLabel>Title</FormLabel>
                                             <FormControl>
                                                 <Input
@@ -103,11 +201,40 @@ export function FooterNav() {
 
                                 <FormField
                                     name="date"
-                                    render={(field) => (
+                                    control={form.control}
+                                    render={({ field }) => (
                                         <FormItem className="flex flex-col text-left mt-4 pt-4">
                                             <FormLabel>Schedule Date</FormLabel>
                                             <FormControl>
-                                                <DatePicker />
+                                                <Popover>
+                                                    <PopoverTrigger asChild>
+                                                        <Button
+                                                            variant="outline"
+                                                            className="w-full text-left"
+                                                        >
+                                                            {field.value
+                                                                ? format(
+                                                                      field.value,
+                                                                      "yyyy-MM-dd"
+                                                                  )
+                                                                : "Pick a date"}
+                                                        </Button>
+                                                    </PopoverTrigger>
+                                                    <PopoverContent className="w-auto p-0">
+                                                        <Calendar
+                                                            mode="single"
+                                                            selected={
+                                                                field.value
+                                                            }
+                                                            onSelect={(date) =>
+                                                                field.onChange(
+                                                                    date
+                                                                )
+                                                            }
+                                                            initialFocus
+                                                        />
+                                                    </PopoverContent>
+                                                </Popover>
                                             </FormControl>
                                         </FormItem>
                                     )}
@@ -115,7 +242,7 @@ export function FooterNav() {
 
                                 <div className="flex gap-12 pb-8 pt-4">
                                     <FormField
-                                        name="startTime"
+                                        name="start_time"
                                         render={({ field }) => (
                                             <FormItem className="text-left mt-4">
                                                 <FormLabel>
@@ -123,8 +250,17 @@ export function FooterNav() {
                                                 </FormLabel>
                                                 <FormControl>
                                                     <TimePicker
-                                                        setDate={field.onChange}
-                                                        date={field.value}
+                                                        date={
+                                                            field.value ||
+                                                            undefined
+                                                        }
+                                                        setDate={(
+                                                            selectedTime
+                                                        ) => {
+                                                            field.onChange(
+                                                                selectedTime
+                                                            ); // Pass Date object
+                                                        }}
                                                     />
                                                 </FormControl>
                                             </FormItem>
@@ -132,14 +268,23 @@ export function FooterNav() {
                                     />
 
                                     <FormField
-                                        name="endtTime"
+                                        name="end_time"
                                         render={({ field }) => (
                                             <FormItem className="text-left mt-4">
                                                 <FormLabel>End time</FormLabel>
                                                 <FormControl>
                                                     <TimePicker
-                                                        setDate={field.onChange}
-                                                        date={field.value}
+                                                        date={
+                                                            field.value ||
+                                                            undefined
+                                                        }
+                                                        setDate={(
+                                                            selectedTime
+                                                        ) => {
+                                                            field.onChange(
+                                                                selectedTime
+                                                            ); // Pass Date object
+                                                        }}
                                                     />
                                                 </FormControl>
                                             </FormItem>
@@ -153,10 +298,8 @@ export function FooterNav() {
                                 >
                                     Create
                                 </Button>
-                                {/* </form> */}
-                            </Form>
-                            {/* </DialogDescription> */}
-                        </DialogHeader>
+                            </form>
+                        </Form>
                     </DialogContent>
                 </Dialog>
                 <a
