@@ -41,24 +41,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Calendar } from "../ui/calendar";
 import { format } from "date-fns";
 
-export function FooterNav() {
-    // const [formData, setFormData] = useState({
-    //     title: "",
-    //     label: "",
-    //     color: "",
-    //     description: "",
-    //     date: "",
-    //     start_time: "",
-    //     end_time: "",
-    // });
-
+export function FooterNav({ listUpdated }: { listUpdated: () => void }) {
     // manage dialog open/close state
     const [dialogOpen, setDialogOpen] = useState(false);
 
     const [responseMessage, setResponseMessage] = useState("");
-
-    // track list updates
-    const [listUpdated, setListUpdated] = useState(false);
 
     const formSchema = z.object({
         title: z.string().min(1, "Title is required"),
@@ -69,15 +56,6 @@ export function FooterNav() {
         start_time: z.date(),
         end_time: z.date(),
     });
-
-    // update state for any form field
-    // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     const { name, value } = e.target;
-    //     setFormData((prevState) => ({
-    //         ...prevState,
-    //         [name]: value,
-    //     }));
-    // };
 
     // set default values
     const form = useForm<z.infer<typeof formSchema>>({
@@ -105,7 +83,7 @@ export function FooterNav() {
 
             // notify parent to update the list
             // trigger list refresh
-            setListUpdated(true);
+            listUpdated();
         } catch (error: any) {
             // handle error
             setResponseMessage(

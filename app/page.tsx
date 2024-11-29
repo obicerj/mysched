@@ -117,6 +117,18 @@ export default function Home() {
         setFetchDate(selectedDate);
     };
 
+    // update schedule list after create form submission
+    const updateScheduleList = async () => {
+        const pickDate = fetchDate || format(new Date(), "yyyy-MM-dd");
+
+        try {
+            const res = await axios.get(`/api/schedule/date/${pickDate}`);
+            setMySchedule(res.data);
+        } catch (e) {
+            console.error("Error updating schedules:", e);
+        }
+    };
+
     useEffect(() => {
         const pickDate = fetchDate
             ? fetchDate
@@ -322,7 +334,7 @@ export default function Home() {
                 )}
             </main>
 
-            <FooterNav />
+            <FooterNav listUpdated={updateScheduleList} />
         </div>
     );
 }
