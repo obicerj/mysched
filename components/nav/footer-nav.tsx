@@ -65,13 +65,13 @@ export function FooterNav() {
     const [responseMessage, setResponseMessage] = useState("");
 
     // update state for any form field
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData((prevState) => ({
-            ...prevState,
-            [name]: value,
-        }));
-    };
+    // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     const { name, value } = e.target;
+    //     setFormData((prevState) => ({
+    //         ...prevState,
+    //         [name]: value,
+    //     }));
+    // };
 
     // set default values
     const form = useForm<z.infer<typeof formSchema>>({
@@ -88,7 +88,6 @@ export function FooterNav() {
     });
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        console.log("resulta", values);
         try {
             // send data to the API
             const response = await axios.post("/api/schedule", values);
@@ -100,35 +99,6 @@ export function FooterNav() {
             );
         }
     };
-
-    // const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    //     console.log(JSON.stringify(data, null, 2));
-
-    //     try {
-    //         // send data to the API
-    //         await axios.post("/api/schedule", data);
-    //         setResponseMessage("Schedule added successfully!");
-    //     } catch (error: any) {
-    //         // handle error
-    //         setResponseMessage(
-    //             error.response?.data?.error || "An error occurred."
-    //         );
-    //     }
-    // };
-
-    //     e.preventDefault();
-    //     console.log("resulta", values);
-    //     try {
-    //         // send data to the API
-    //         const response = await axios.post("/api/schedule", formData);
-    //         setResponseMessage("Schedule added successfully!");
-    //     } catch (error: any) {
-    //         // handle error
-    //         setResponseMessage(
-    //             error.response?.data?.error || "An error occurred."
-    //         );
-    //     }
-    // };
 
     return (
         <nav className="flex mt-12 ">
@@ -144,14 +114,6 @@ export function FooterNav() {
                     <LightningBoltIcon />
                     Dashboard
                 </a>
-                {/* <a
-                        className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-                        href="#"
-                        rel="noopener noreferrer"
-                    >
-                        <CardStackPlusIcon />
-                        Create Schedule
-                    </a> */}
 
                 <Dialog>
                     <DialogTrigger className="flex items-center gap-2">
@@ -259,7 +221,7 @@ export function FooterNav() {
                                                         ) => {
                                                             field.onChange(
                                                                 selectedTime
-                                                            ); // Pass Date object
+                                                            ); // pass date object
                                                         }}
                                                     />
                                                 </FormControl>
@@ -283,7 +245,7 @@ export function FooterNav() {
                                                         ) => {
                                                             field.onChange(
                                                                 selectedTime
-                                                            ); // Pass Date object
+                                                            ); // pass date object
                                                         }}
                                                     />
                                                 </FormControl>
@@ -294,7 +256,7 @@ export function FooterNav() {
 
                                 <Button
                                     type="submit"
-                                    className="mt-4 bg-amber-500 hover:bg-amber-400"
+                                    className="mt-4 bg-amber-500 hover:bg-amber-400 w-full"
                                 >
                                     Create
                                 </Button>
