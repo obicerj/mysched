@@ -178,7 +178,7 @@ export default function Labels() {
                 <Accordion type="single" collapsible className="w-full">
                     {fetchLabels.map((label, id) => {
                         return (
-                            <AccordionItem value={`item-${id}`}>
+                            <AccordionItem value={`item-${id}`} key={id}>
                                 <AccordionTrigger>
                                     {label.name}
                                 </AccordionTrigger>
