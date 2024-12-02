@@ -124,7 +124,7 @@ export default function Labels() {
                                             <SelectItem value="bg-red-200">
                                                 <div className="flex flex-row gap-2">
                                                     <ValueIcon className="mt-0.5 bg-red-200 text-red-200 rounded-full" />
-                                                    <div>Red</div>
+                                                    Red
                                                 </div>
                                             </SelectItem>
                                             <SelectItem value="bg-amber-200">

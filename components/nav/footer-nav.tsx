@@ -8,6 +8,7 @@ import {
     CardStackPlusIcon,
     StarIcon,
     CalendarIcon,
+    ValueIcon,
 } from "@radix-ui/react-icons";
 
 import {
@@ -35,11 +36,13 @@ import { DatePicker } from "@/components/date-picker/date-picker";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Calendar } from "../ui/calendar";
 import { format } from "date-fns";
+import { Select, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { SelectContent } from "@radix-ui/react-select";
 
 export function FooterNav({ listUpdated }: { listUpdated: () => void }) {
     // manage dialog open/close state
@@ -49,7 +52,7 @@ export function FooterNav({ listUpdated }: { listUpdated: () => void }) {
 
     const formSchema = z.object({
         title: z.string().min(1, "Title is required"),
-        label: z.string(),
+        category_id: z.string(),
         color: z.string(),
         description: z.string(),
         date: z.date(),
@@ -62,7 +65,7 @@ export function FooterNav({ listUpdated }: { listUpdated: () => void }) {
         resolver: zodResolver(formSchema),
         defaultValues: {
             title: "",
-            label: "work",
+            category_id: "",
             color: "bg-red-100",
             description: "",
             date: undefined,
@@ -91,6 +94,25 @@ export function FooterNav({ listUpdated }: { listUpdated: () => void }) {
             );
         }
     };
+
+    interface Label {
+        id: number;
+        name: string;
+        color: string;
+    }
+    const [fetchLabels, setFetchLabels] = useState<Label[]>([]);
+
+    useEffect(() => {
+        const labels = async () => {
+            try {
+                const res = await axios.get("/api/labels");
+                setFetchLabels(res.data);
+            } catch (e) {
+                console.error("Error fetching labels", e);
+            }
+        };
+        labels();
+    }, []);
 
     return (
         <nav className="flex mt-12 ">
@@ -189,6 +211,56 @@ export function FooterNav({ listUpdated }: { listUpdated: () => void }) {
                                                         />
                                                     </PopoverContent>
                                                 </Popover>
+                                            </FormControl>
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    name="category_id"
+                                    control={form.control}
+                                    render={({ field }) => (
+                                        <FormItem className="mt-4">
+                                            <FormLabel>Label</FormLabel>
+                                            <FormControl>
+                                                <Select
+                                                    onValueChange={(value) =>
+                                                        field.onChange(value)
+                                                    }
+                                                    value={field.value.toString()}
+                                                >
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select a label" />
+                                                    </SelectTrigger>
+                                                    <SelectContent className="bg-white">
+                                                        {fetchLabels.map(
+                                                            (label, id) => {
+                                                                return (
+                                                                    <SelectItem
+                                                                        key={id}
+                                                                        value={label.id.toString()}
+                                                                    >
+                                                                        <div className="flex flex-row gap-2">
+                                                                            {`${label.id}`}
+                                                                            <ValueIcon
+                                                                                className={`mt-0.5 ${label.color} text-red-200 rounded-full`}
+                                                                            />
+                                                                            {
+                                                                                label.name
+                                                                            }
+                                                                        </div>
+                                                                    </SelectItem>
+                                                                );
+                                                            }
+                                                        )}
+                                                        {/* <SelectItem value="bg-amber-200">
+                                                            <div className="flex flex-row gap-2">
+                                                                <ValueIcon className="mt-0.5 bg-amber-200 text-amber-200 rounded-full" />
+                                                                Amber
+                                                            </div>
+                                                        </SelectItem> */}
+                                                    </SelectContent>
+                                                </Select>
                                             </FormControl>
                                         </FormItem>
                                     )}

@@ -1,15 +1,21 @@
 ### TO DO LIST
 
--   add menu nav bar
--   add button for sched (delete, edit) when clicked on sched card show edit form
--   create forms for (create, edit)
--   add calender on update and create form
+-   Edit form
+-   CRUD Labels
+-   Add labels on create and edit form
 
--   setup database for storage
--   add functions
+-   Refactor codes (ts)
+-   User Account Middleware
+
 -   add desktop view
 
+-   Mysql dump file
+
 -   write testing using Jest and Vitest
+
+```
+docker-compose up -d
+```
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 

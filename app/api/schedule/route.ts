@@ -14,11 +14,11 @@ export async function POST(request: Request) {
         const body = await request.json();
 
         console.log("Parsed body:", body);
-        const { title, description, date, start_time, end_time, color, label } = body;
+        const { title, description, date, start_time, end_time, color, category_id } = body;
 
         // validate data
         console.log("Step 2: Validating input");
-        if (!title || !description || !date || !start_time || !end_time || !color || !label) {
+        if (!title || !description || !date || !start_time || !end_time || !color || !category_id) {
             return NextResponse.json(
                 { error: "Missing required fields." },
                 { status: 400 }
@@ -46,8 +46,8 @@ export async function POST(request: Request) {
     
         // Insert the data into the database
         console.log("Step 4: Executing the query");
-        const query = `INSERT INTO mysched.schedules (title, description, date, start_time, end_time, color, label) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-        const [result] = await db.execute(query, [title, description, formattedDate, formattedStartTime, formattedEndTime, color, label]);
+        const query = `INSERT INTO mysched.schedules (title, description, date, start_time, end_time, color, category_id) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+        const [result] = await db.execute(query, [title, description, formattedDate, formattedStartTime, formattedEndTime, color, category_id]);
 
         // close connection
         await db.end();
