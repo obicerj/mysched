@@ -53,6 +53,7 @@ import {
 interface Schedule {
     id: number;
     category_id: string;
+    category_name: string;
     color: string;
     title: string;
     description: string;
@@ -88,7 +89,7 @@ export function SchedCard({ daySched, updateScheduleList }: SchedCardProps) {
                 <CardHeader>
                     <CardDescription className="flex text-slate-600 justify-between">
                         <Label className="underline underline-offset-8">
-                            {event.category_id}
+                            {event.category_name}
                         </Label>
                         <Drawer
                             open={deleteOpen[event.id] || false}

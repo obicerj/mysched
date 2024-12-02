@@ -44,7 +44,7 @@ export default function Home() {
 
     interface Schedule {
         id: number;
-        label: string;
+        category_id: string;
         color: string;
         title: string;
         description: string;
