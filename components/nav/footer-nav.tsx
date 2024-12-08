@@ -52,7 +52,7 @@ export function FooterNav({ listUpdated }: { listUpdated: () => void }) {
 
     const formSchema = z.object({
         title: z.string().min(1, "Title is required"),
-        category_id: z.string(),
+        category_id: z.number().int(),
         color: z.string(),
         description: z.string(),
         date: z.date(),
@@ -65,7 +65,7 @@ export function FooterNav({ listUpdated }: { listUpdated: () => void }) {
         resolver: zodResolver(formSchema),
         defaultValues: {
             title: "",
-            category_id: "",
+            category_id: undefined,
             color: "bg-red-100",
             description: "",
             date: undefined,
@@ -253,12 +253,6 @@ export function FooterNav({ listUpdated }: { listUpdated: () => void }) {
                                                                 );
                                                             }
                                                         )}
-                                                        {/* <SelectItem value="bg-amber-200">
-                                                            <div className="flex flex-row gap-2">
-                                                                <ValueIcon className="mt-0.5 bg-amber-200 text-amber-200 rounded-full" />
-                                                                Amber
-                                                            </div>
-                                                        </SelectItem> */}
                                                     </SelectContent>
                                                 </Select>
                                             </FormControl>

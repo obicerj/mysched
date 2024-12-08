@@ -44,14 +44,14 @@ export default function Home() {
 
     interface Schedule {
         id: number;
-        category_id: string;
+        category_id: number;
         category_name: string;
         color: string;
         title: string;
         description: string;
-        date: string;
-        start_time: string;
-        end_time: string;
+        date: Date;
+        start_time: Date;
+        end_time: Date;
     }
 
     const [mySchedule, setMySchedule] = useState<Schedule[]>([]);
