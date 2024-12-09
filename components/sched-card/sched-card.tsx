@@ -80,7 +80,7 @@ export function SchedCard({ daySched, updateScheduleList }: SchedCardProps) {
     const [deleteOpen, setDeleteOpen] = useState<Record<number, boolean>>({});
     const [loading, setLoading] = useState(false);
     // manage dialog open/close state
-    const [dialogOpen, setDialogOpen] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState<Record<number, boolean>>({});
 
     // Define schedule schema using Zod
     const scheduleSchema = z.object({
@@ -168,7 +168,15 @@ export function SchedCard({ daySched, updateScheduleList }: SchedCardProps) {
                 </CardDescription>
 
                 <CardTitle className="font-normal text-xl">
-                    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                    <Dialog
+                        open={dialogOpen[event.id]}
+                        onOpenChange={(isOpen) =>
+                            setDialogOpen((prev) => ({
+                                ...prev,
+                                [event.id]: isOpen,
+                            }))
+                        }
+                    >
                         {/* onClick={() => handleEdit(event)} */}
                         <DialogTrigger>
                             {event.title} {event.id}
