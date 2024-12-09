@@ -9,16 +9,11 @@ interface SummaryCalendarProps {
 export function SummaryCalendar({ fetchSelectedDate }: SummaryCalendarProps) {
     const [date, setDate] = React.useState<Date | undefined>(new Date());
 
-    // format(date, "yyyy-MM-dd HH:mm:ss")
-    // fetchSelectedDate(format(date, "yyyy-MM-dd HH:mm:ss"));
-
     useEffect(() => {
         if (date) {
             fetchSelectedDate(format(date, "yyyy-MM-dd HH:mm:ss"));
         }
     }, [date, fetchSelectedDate]);
-
-    // console.log(date);
 
     return (
         <div className="mt-6">

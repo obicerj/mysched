@@ -7,8 +7,6 @@ import { GetDBSettings, DBSettings } from "@/lib/utils";
 import { z } from "zod";
 import { use } from "react";
 
-// import { scheduleSchema } from "@/schemas/scheduleSchema";
-
 // connection parameters
 let connectionParams = GetDBSettings();
 
@@ -17,21 +15,8 @@ export async function GET(request: Request,  { params }: { params: { slug: strin
   const slug = params.slug 
   
   try {
-    // const { slug } = await params;
-
     // connect to db
     const db = await mysql.createConnection(connectionParams);
-
-    // Ensure params and slug are available
-    // if (!slug) {
-    //     return NextResponse.json(
-    //         { error: "ID parameter is required." },
-    //         { status: 400 }
-    //     );
-    // }
-
-    // connect to db
-    // const db = await mysql.createConnection(connectionParams);
 
     // create query to fetch data
     const query = 'SELECT schedules.*, categories.name AS category_name FROM mysched.schedules JOIN categories ON schedules.category_id = categories.id WHERE schedules.id = ?';
@@ -40,8 +25,7 @@ export async function GET(request: Request,  { params }: { params: { slug: strin
     const [results] = await db.execute(query, [slug])
 
     // close connection
-    // await db.end();
-    db.end();
+    await db.end();
 
 
     // return results as json api response
@@ -75,7 +59,6 @@ export async function PUT(req: NextRequest,  context: { params: {slug: string} }
     try {
         // const { id } = params;
         const { slug } = context.params;
-        // const slug = (await params).slug;
         const parsedId = parseInt(slug, 10);
         
 
@@ -102,17 +85,6 @@ export async function PUT(req: NextRequest,  context: { params: {slug: string} }
         const body = JSON.parse(rawBody);
         console.log("Parsed body:", body);
 
-
-        // let body;
-        // try {
-        //     body = await req.json();
-        //   } catch (error) {
-        //     return NextResponse.json(
-        //       { error: "Invalid JSON payload" },
-        //       { status: 400 }
-        //     );
-        //   }
-
         const validatedData = scheduleSchema.parse({ ...body, id: parsedId });
         console.log("Validated data:", validatedData);
 
@@ -132,12 +104,10 @@ export async function PUT(req: NextRequest,  context: { params: {slug: string} }
           );
 
         // create query to fetch data
-        // const query = 'SELECT schedules.*, categories.name AS category_name FROM mysched.schedules JOIN categories ON schedules.category_id = categories.id WHERE DATE(date) = DATE(?)';
         const query = 'SELECT schedules.*, categories.name AS category_name FROM mysched.schedules JOIN categories ON schedules.category_id = categories.id WHERE schedules.id = ?';
         
         // pass parameters to the sql query
         const [results] = await db.execute(query, [parsedId])
-
 
         console.log({ message: "Schedule updated successfully" });
 

@@ -5,13 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Calendar } from "../ui/calendar";
-
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { TimePicker } from "@/components/time-picker/time-picker";
-import { DatePicker } from "@/components/date-picker/date-picker";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "../ui/button";
 
@@ -34,16 +28,6 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from "@/components/ui/drawer";
-
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
 
 import {
     Dialog,
@@ -111,19 +95,6 @@ export function SchedCard({ daySched, updateScheduleList }: SchedCardProps) {
         }
     };
 
-    // Handle edit to prefill form data
-    // const handleEdit = (event: Schedule) => {
-    //     console.log("Prefilling form with event data:", event);
-    //     form.setValue("id", event.id);
-    //     form.setValue("title", event.title);
-    //     form.setValue("description", event.description);
-    //     form.setValue("category_id", event.category_id);
-    //     form.setValue("color", event.color);
-    //     form.setValue("date", new Date(event.date));
-    //     form.setValue("start_time", new Date(event.start_time));
-    //     form.setValue("end_time", new Date(event.end_time));
-    // };
-
     const { errors } = form.formState;
 
     return daySched.map((event, id) => (
@@ -177,7 +148,6 @@ export function SchedCard({ daySched, updateScheduleList }: SchedCardProps) {
                             }))
                         }
                     >
-                        {/* onClick={() => handleEdit(event)} */}
                         <DialogTrigger>{event.title}</DialogTrigger>
 
                         <DialogContent className="text-left">
@@ -195,7 +165,6 @@ export function SchedCard({ daySched, updateScheduleList }: SchedCardProps) {
                                 key={event.id}
                                 scheduleId={event.id}
                                 event={event}
-                                // setDialogOpen={setDialogOpen}
                                 setDialogOpen={(isOpen) =>
                                     setDialogOpen((prev) => ({
                                         ...prev,

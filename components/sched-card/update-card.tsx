@@ -38,7 +38,7 @@ type ScheduleFormData = z.infer<typeof scheduleSchema>;
 // Define props including the new event prop
 interface UpdateScheduleFormProps {
     scheduleId: number;
-    event?: ScheduleFormData; // Optional if prefilled data is passed as a prop
+    event?: ScheduleFormData;
     setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
     updateScheduleList: () => void;
 }
@@ -49,7 +49,6 @@ const UpdateScheduleForm: React.FC<UpdateScheduleFormProps> = ({
     setDialogOpen,
     updateScheduleList,
 }) => {
-    // const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(true);
 
@@ -68,51 +67,6 @@ const UpdateScheduleForm: React.FC<UpdateScheduleFormProps> = ({
         defaultValues: event,
     });
 
-    // const form = useForm<ScheduleFormData>({
-    //     resolver: zodResolver(scheduleSchema),
-    //     defaultValues: { id: scheduleId },
-    // });
-    // const {
-    //     reset,
-    //     register,
-    //     handleSubmit,
-    //     formState: { errors },
-    // } = form;
-
-    // Fetch schedule data on component mount
-    // useEffect(() => {
-    //     console.log("get", scheduleId);
-    //     const fetchSchedule = async () => {
-    //         try {
-    //             const { data } = await axios.get(`/api/schedule/${scheduleId}`);
-    //             reset({
-    //                 id: data.id,
-    //                 title: data.title,
-    //                 description: data.description,
-    //                 date: new Date(data.date),
-    //                 start_time: new Date(data.start_time),
-    //                 end_time: new Date(data.end_time),
-    //                 category_id: data.category_id,
-    //             });
-    //             form.setValue("id", data.id);
-    //             form.setValue("title", data.title);
-    //             form.setValue("description", data.description);
-    //             form.setValue("category_id", data.category_id);
-    //             // form.setValue("color", data.color);
-    //             form.setValue("date", new Date(data.date));
-    //             form.setValue("start_time", new Date(data.start_time));
-    //             form.setValue("end_time", new Date(data.end_time));
-    //         } catch (error) {
-    //             console.log("Failed to fetch schedule:", error);
-    //             console.log("Failed to load schedule data.");
-    //         } finally {
-    //             setFetching(false);
-    //         }
-    //     };
-
-    //     fetchSchedule();
-    // }, [scheduleId, reset]);
-
     const onSubmit: SubmitHandler<ScheduleFormData> = async (data) => {
         setLoading(true);
         try {
@@ -124,7 +78,6 @@ const UpdateScheduleForm: React.FC<UpdateScheduleFormProps> = ({
 
             setDialogOpen(false);
             updateScheduleList();
-            // router.push("/"); // Navigate to schedules page after success
         } catch (error) {
             console.log(error);
             console.log({
