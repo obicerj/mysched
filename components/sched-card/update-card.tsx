@@ -123,7 +123,7 @@ const UpdateScheduleForm: React.FC<UpdateScheduleFormProps> = ({
             });
 
             setDialogOpen(false);
-            // updateScheduleList();
+            updateScheduleList();
             // router.push("/"); // Navigate to schedules page after success
         } catch (error) {
             console.log(error);
@@ -178,7 +178,7 @@ const UpdateScheduleForm: React.FC<UpdateScheduleFormProps> = ({
                         <FormItem>
                             <FormLabel>Date</FormLabel>
                             <FormControl>
-                                {/* <Popover>
+                                <Popover>
                                     <PopoverTrigger asChild>
                                         <Button
                                             variant="outline"
@@ -202,7 +202,7 @@ const UpdateScheduleForm: React.FC<UpdateScheduleFormProps> = ({
                                             initialFocus
                                         />
                                     </PopoverContent>
-                                </Popover> */}
+                                </Popover>
                             </FormControl>
                         </FormItem>
                     )}
@@ -242,7 +242,11 @@ const UpdateScheduleForm: React.FC<UpdateScheduleFormProps> = ({
                     />
                 </div>
 
-                <Button type="submit" disabled={loading}>
+                <Button
+                    type="submit"
+                    disabled={loading}
+                    className="bg-amber-500 hover:bg-amber-400"
+                >
                     {loading ? "Updating..." : "Update Schedule"}
                 </Button>
             </form>
