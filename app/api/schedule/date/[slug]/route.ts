@@ -24,7 +24,7 @@ export async function GET(request: Request,  { params }: { params: { slug: strin
         const db = await mysql.createConnection(connectionParams);
 
         // create query to fetch data
-        const query = 'SELECT schedules.*, categories.name AS category_name FROM mysched.schedules JOIN categories ON schedules.category_id = categories.id WHERE DATE(date) = DATE(?)';
+        const query = 'SELECT schedules.*, categories.name AS category_name, categories.color AS color FROM mysched.schedules JOIN categories ON schedules.category_id = categories.id WHERE DATE(date) = DATE(?)';
         
         // pass parameters to the sql query
         const [results] = await db.execute(query, [slug])
