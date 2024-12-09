@@ -157,7 +157,7 @@ export function SchedCard({ daySched, updateScheduleList }: SchedCardProps) {
                             <DrawerFooter className="flex flex-row justify-center gap-4">
                                 <Button
                                     onClick={() => deleteSchedule(event.id)}
-                                    className="bg-amber-500"
+                                    className="bg-amber-500 hover:bg-amber-400"
                                 >
                                     Delete
                                 </Button>
@@ -178,9 +178,7 @@ export function SchedCard({ daySched, updateScheduleList }: SchedCardProps) {
                         }
                     >
                         {/* onClick={() => handleEdit(event)} */}
-                        <DialogTrigger>
-                            {event.title} {event.id}
-                        </DialogTrigger>
+                        <DialogTrigger>{event.title}</DialogTrigger>
 
                         <DialogContent className="text-left">
                             <DialogHeader>

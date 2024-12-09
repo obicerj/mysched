@@ -245,7 +245,7 @@ const UpdateScheduleForm: React.FC<UpdateScheduleFormProps> = ({
                 <Button
                     type="submit"
                     disabled={loading}
-                    className="bg-amber-500 hover:bg-amber-400"
+                    className="bg-amber-500 hover:bg-amber-400 w-full"
                 >
                     {loading ? "Updating..." : "Update Schedule"}
                 </Button>
