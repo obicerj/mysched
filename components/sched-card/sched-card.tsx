@@ -169,7 +169,7 @@ export function SchedCard({ daySched, updateScheduleList }: SchedCardProps) {
 
                 <CardTitle className="font-normal text-xl">
                     <Dialog
-                        open={dialogOpen[event.id]}
+                        open={dialogOpen[event.id] || false}
                         onOpenChange={(isOpen) =>
                             setDialogOpen((prev) => ({
                                 ...prev,
@@ -194,9 +194,16 @@ export function SchedCard({ daySched, updateScheduleList }: SchedCardProps) {
                                 </DialogDescription>
                             </DialogHeader>
                             <UpdateScheduleForm
+                                key={event.id}
                                 scheduleId={event.id}
                                 event={event}
                                 // setDialogOpen={setDialogOpen}
+                                setDialogOpen={(isOpen) =>
+                                    setDialogOpen((prev) => ({
+                                        ...prev,
+                                        [event.id]: isOpen as boolean,
+                                    }))
+                                }
                                 updateScheduleList={updateScheduleList}
                             />
                         </DialogContent>

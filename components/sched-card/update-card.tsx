@@ -39,14 +39,14 @@ type ScheduleFormData = z.infer<typeof scheduleSchema>;
 interface UpdateScheduleFormProps {
     scheduleId: number;
     event?: ScheduleFormData; // Optional if prefilled data is passed as a prop
-    // setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
     updateScheduleList: () => void;
 }
 
 const UpdateScheduleForm: React.FC<UpdateScheduleFormProps> = ({
     scheduleId,
     event,
-    // setDialogOpen,
+    setDialogOpen,
     updateScheduleList,
 }) => {
     // const router = useRouter();
@@ -122,7 +122,7 @@ const UpdateScheduleForm: React.FC<UpdateScheduleFormProps> = ({
                 status: "success",
             });
 
-            // setDialogOpen(false);
+            setDialogOpen(false);
             // updateScheduleList();
             // router.push("/"); // Navigate to schedules page after success
         } catch (error) {
