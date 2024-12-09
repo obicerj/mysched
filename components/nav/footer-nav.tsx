@@ -225,9 +225,11 @@ export function FooterNav({ listUpdated }: { listUpdated: () => void }) {
                                             <FormControl>
                                                 <Select
                                                     onValueChange={(value) =>
-                                                        field.onChange(value)
+                                                        field.onChange(
+                                                            parseInt(value, 10)
+                                                        )
                                                     }
-                                                    value={field.value.toString()}
+                                                    value={field.value?.toString()}
                                                 >
                                                     <SelectTrigger>
                                                         <SelectValue placeholder="Select a label" />
