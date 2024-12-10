@@ -27,10 +27,17 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
-import { ValueIcon } from "@radix-ui/react-icons";
+import { CardStackIcon, PlusIcon, ValueIcon } from "@radix-ui/react-icons";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import UpdateLabelForm from "@/components/labels/update-card";
+import { DialogTitle, DialogTrigger } from "@radix-ui/react-dialog";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+} from "@/components/ui/dialog";
 
 export default function Labels() {
     // define the schema using Zod
@@ -61,6 +68,7 @@ export default function Labels() {
         // console.log("Form Data:", data);
         try {
             const res = await axios.post("/api/labels", data);
+            setDialogOpen(false);
             form.reset();
             labels();
         } catch (e) {
@@ -101,103 +109,121 @@ export default function Labels() {
         }
     };
 
+    // manage dialog open/close state
+    const [dialogOpen, setDialogOpen] = useState(false);
+
     return (
-        <div className="p-4 text-slate-800 font-[family-name:var(--font-geist-sans)]">
+        <div className="p-4 mb-24 text-slate-800 font-[family-name:var(--font-geist-sans)]">
             <Header />
 
-            <h1 className="text-xl font-bold mt-8 mb-4">Create a Label</h1>
-            <Form {...form}>
-                <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-6"
-                >
-                    {/* Name Field */}
-                    <FormField
-                        name="name"
-                        control={form.control}
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Name</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        placeholder="e.g., Work"
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    {/* Color Field */}
-                    <FormField
-                        name="color"
-                        control={form.control}
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Color</FormLabel>
-                                <FormControl>
-                                    <Select
-                                        onValueChange={(value) =>
-                                            field.onChange(value)
-                                        }
-                                        value={field.value}
-                                    >
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select a schedule color" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="bg-red-200">
-                                                <div className="flex flex-row gap-2">
-                                                    <ValueIcon className="mt-0.5 bg-red-200 text-red-200 rounded-full" />
-                                                    Red
-                                                </div>
-                                            </SelectItem>
-                                            <SelectItem value="bg-amber-200">
-                                                <div className="flex flex-row gap-2">
-                                                    <ValueIcon className="mt-0.5 bg-amber-200 text-amber-200 rounded-full" />
-                                                    Amber
-                                                </div>
-                                            </SelectItem>
-                                            <SelectItem value="bg-blue-200">
-                                                <div className="flex flex-row gap-2">
-                                                    <ValueIcon className="mt-0.5 bg-blue-200 text-blue-200 rounded-full" />
-                                                    Blue
-                                                </div>
-                                            </SelectItem>
-                                            <SelectItem value="bg-pink-200">
-                                                <div className="flex flex-row gap-2">
-                                                    <ValueIcon className="mt-0.5 bg-pink-200 text-pink-200 rounded-full" />
-                                                    Pink
-                                                </div>
-                                            </SelectItem>
-                                            <SelectItem value="bg-indigo-200">
-                                                <div className="flex flex-row gap-2">
-                                                    <ValueIcon className="mt-0.5 bg-indigo-200 text-indigo-200 rounded-full" />
-                                                    Indigo
-                                                </div>
-                                            </SelectItem>
-                                            <SelectItem value="bg-green-200">
-                                                <div className="flex flex-row gap-2">
-                                                    <ValueIcon className="mt-0.5 bg-green-200 text-green-200 rounded-full" />
-                                                    Green
-                                                </div>
-                                            </SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    {/* Submit Button */}
-                    <Button
-                        type="submit"
-                        className="mt-4 px-4 py-2 bg-amber-500 hover:bg-amber-400 text-white rounded"
-                    >
-                        Create
-                    </Button>
-                </form>
-            </Form>
+            <div
+                className="fixed bottom-4 z-10 left-1/2 -translate-x-1/2 w-max flex gap-6 justify-center items-center
+        border px-6 py-4 rounded-full border-amber-300 bg-amber-300"
+            >
+                <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                    <DialogTrigger className="flex items-center gap-2 hover:underline hover:underline-offset-4">
+                        <PlusIcon /> <span>Add Label</span>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Add Label</DialogTitle>
+                            <DialogDescription></DialogDescription>
+                        </DialogHeader>
+                        <Form {...form}>
+                            <form
+                                onSubmit={form.handleSubmit(onSubmit)}
+                                className="space-y-6"
+                            >
+                                {/* Name Field */}
+                                <FormField
+                                    name="name"
+                                    control={form.control}
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Name</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder="e.g., Work"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                {/* Color Field */}
+                                <FormField
+                                    name="color"
+                                    control={form.control}
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Color</FormLabel>
+                                            <FormControl>
+                                                <Select
+                                                    onValueChange={(value) =>
+                                                        field.onChange(value)
+                                                    }
+                                                    value={field.value}
+                                                >
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select a schedule color" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="bg-red-200">
+                                                            <div className="flex flex-row gap-2">
+                                                                <ValueIcon className="mt-0.5 bg-red-200 text-red-200 rounded-full" />
+                                                                Red
+                                                            </div>
+                                                        </SelectItem>
+                                                        <SelectItem value="bg-amber-200">
+                                                            <div className="flex flex-row gap-2">
+                                                                <ValueIcon className="mt-0.5 bg-amber-200 text-amber-200 rounded-full" />
+                                                                Amber
+                                                            </div>
+                                                        </SelectItem>
+                                                        <SelectItem value="bg-blue-200">
+                                                            <div className="flex flex-row gap-2">
+                                                                <ValueIcon className="mt-0.5 bg-blue-200 text-blue-200 rounded-full" />
+                                                                Blue
+                                                            </div>
+                                                        </SelectItem>
+                                                        <SelectItem value="bg-pink-200">
+                                                            <div className="flex flex-row gap-2">
+                                                                <ValueIcon className="mt-0.5 bg-pink-200 text-pink-200 rounded-full" />
+                                                                Pink
+                                                            </div>
+                                                        </SelectItem>
+                                                        <SelectItem value="bg-indigo-200">
+                                                            <div className="flex flex-row gap-2">
+                                                                <ValueIcon className="mt-0.5 bg-indigo-200 text-indigo-200 rounded-full" />
+                                                                Indigo
+                                                            </div>
+                                                        </SelectItem>
+                                                        <SelectItem value="bg-green-200">
+                                                            <div className="flex flex-row gap-2">
+                                                                <ValueIcon className="mt-0.5 bg-green-200 text-green-200 rounded-full" />
+                                                                Green
+                                                            </div>
+                                                        </SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                {/* Submit Button */}
+                                <Button
+                                    type="submit"
+                                    className="mt-4 px-4 py-2 bg-amber-500 hover:bg-amber-400 text-white rounded w-full"
+                                >
+                                    Create
+                                </Button>
+                            </form>
+                        </Form>
+                    </DialogContent>
+                </Dialog>
+            </div>
 
             <h1 className="text-xl font-bold mt-8 mb-4">Schedule Labels</h1>
             <div className="mt-8 border rounded-xl px-4">
