@@ -22,6 +22,15 @@ import axios from "axios";
 import { z } from "zod";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "../ui/select";
+import { ValueIcon } from "@radix-ui/react-icons";
+import { useState } from "react";
 
 const LabelFormSchema = z.object({
     name: z.string().min(1, "Name is required"),
@@ -33,12 +42,10 @@ type LabelFormData = z.infer<typeof LabelFormSchema>;
 interface UpdateLabelFormProps {
     labelId: number;
     label?: LabelFormData;
-    setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
     labels: () => void;
 }
 const UpdateLabelForm: React.FC<UpdateLabelFormProps> = ({
     labelId,
-    setDialogOpen,
     labels,
     label,
 }) => {
@@ -59,6 +66,9 @@ const UpdateLabelForm: React.FC<UpdateLabelFormProps> = ({
         defaultValues: label,
     });
 
+    // manage dialog open/close state
+    const [dialogOpen, setDialogOpen] = useState<Record<number, boolean>>({});
+
     // update
     const onUpdate = async (data: z.infer<typeof formSchema>) => {
         try {
@@ -67,15 +77,28 @@ const UpdateLabelForm: React.FC<UpdateLabelFormProps> = ({
                 title: "Label updated successfully",
                 status: "success",
             });
-            setDialogOpen(false);
+
+            setDialogOpen((prev) => ({
+                ...prev,
+                [labelId]: false,
+            }));
+
             labels();
         } catch (e) {
-            console.error(e);
+            console.log(e);
         }
     };
 
     return (
-        <Dialog>
+        <Dialog
+            open={dialogOpen[labelId] || false}
+            onOpenChange={(isOpen) =>
+                setDialogOpen((prev) => ({
+                    ...prev,
+                    [labelId]: isOpen,
+                }))
+            }
+        >
             <DialogTrigger className="bg-amber-500 hover:bg-amber-400 px-6 rounded-md font-medium text-white">
                 Edit
             </DialogTrigger>
@@ -101,6 +124,67 @@ const UpdateLabelForm: React.FC<UpdateLabelFormProps> = ({
                                             {...field}
                                         />
                                     </FormControl>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            name="color"
+                            control={form.control}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Color</FormLabel>
+                                    <FormControl>
+                                        <Select
+                                            onValueChange={(value) =>
+                                                field.onChange(value)
+                                            }
+                                            value={field.value}
+                                        >
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select a schedule color" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="bg-red-200">
+                                                    <div className="flex flex-row gap-2">
+                                                        <ValueIcon className="mt-0.5 bg-red-200 text-red-200 rounded-full" />
+                                                        Red
+                                                    </div>
+                                                </SelectItem>
+                                                <SelectItem value="bg-amber-200">
+                                                    <div className="flex flex-row gap-2">
+                                                        <ValueIcon className="mt-0.5 bg-amber-200 text-amber-200 rounded-full" />
+                                                        Amber
+                                                    </div>
+                                                </SelectItem>
+                                                <SelectItem value="bg-blue-200">
+                                                    <div className="flex flex-row gap-2">
+                                                        <ValueIcon className="mt-0.5 bg-blue-200 text-blue-200 rounded-full" />
+                                                        Blue
+                                                    </div>
+                                                </SelectItem>
+                                                <SelectItem value="bg-pink-200">
+                                                    <div className="flex flex-row gap-2">
+                                                        <ValueIcon className="mt-0.5 bg-pink-200 text-pink-200 rounded-full" />
+                                                        Pink
+                                                    </div>
+                                                </SelectItem>
+                                                <SelectItem value="bg-indigo-200">
+                                                    <div className="flex flex-row gap-2">
+                                                        <ValueIcon className="mt-0.5 bg-indigo-200 text-indigo-200 rounded-full" />
+                                                        Indigo
+                                                    </div>
+                                                </SelectItem>
+                                                <SelectItem value="bg-green-200">
+                                                    <div className="flex flex-row gap-2">
+                                                        <ValueIcon className="mt-0.5 bg-green-200 text-green-200 rounded-full" />
+                                                        Green
+                                                    </div>
+                                                </SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </FormControl>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />

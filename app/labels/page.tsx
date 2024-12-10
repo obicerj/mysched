@@ -33,9 +33,6 @@ import { Button } from "@/components/ui/button";
 import UpdateLabelForm from "@/components/labels/update-card";
 
 export default function Labels() {
-    // manage dialog open/close state
-    const [dialogOpen, setDialogOpen] = useState<Record<number, boolean>>({});
-
     // define the schema using Zod
     const formSchema = z.object({
         name: z.string().min(1, "Name is required"),
@@ -107,6 +104,7 @@ export default function Labels() {
     return (
         <div className="p-4 text-slate-800 font-[family-name:var(--font-geist-sans)]">
             <Header />
+
             <h1 className="text-xl font-bold mt-8 mb-4">Create a Label</h1>
             <Form {...form}>
                 <form
@@ -201,6 +199,7 @@ export default function Labels() {
                 </form>
             </Form>
 
+            <h1 className="text-xl font-bold mt-8 mb-4">Schedule Labels</h1>
             <div className="mt-8 border rounded-xl px-4">
                 <Accordion type="single" collapsible className="w-full">
                     {fetchLabels.map((label, id) => {
@@ -230,13 +229,6 @@ export default function Labels() {
                                         <UpdateLabelForm
                                             key={label.id}
                                             labelId={label.id}
-                                            setDialogOpen={(isOpen) =>
-                                                setDialogOpen((prev) => ({
-                                                    ...prev,
-                                                    [label.id]:
-                                                        isOpen as boolean,
-                                                }))
-                                            }
                                             labels={labels}
                                             label={label}
                                         />
