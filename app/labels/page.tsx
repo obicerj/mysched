@@ -60,6 +60,7 @@ export default function Labels() {
     };
 
     interface Label {
+        id: number;
         name: string;
         color: string;
     }
