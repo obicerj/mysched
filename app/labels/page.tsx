@@ -79,6 +79,18 @@ export default function Labels() {
         labels();
     }, []);
 
+    const deleteLabel = async (labelId: number): Promise<void> => {
+        try {
+            await axios.delete("/api/labels", {
+                params: { id: labelId },
+            });
+
+            labels();
+        } catch (e) {
+            console.error("Error deleting label:");
+        }
+    };
+
     return (
         <div className="p-4 text-slate-800 font-[family-name:var(--font-geist-sans)]">
             <Header />
@@ -193,7 +205,12 @@ export default function Labels() {
                                     </div>
 
                                     <div className="flex gap-2">
-                                        <Button className="bg-red-500 hover:bg-red-400">
+                                        <Button
+                                            onClick={() =>
+                                                deleteLabel(label.id)
+                                            }
+                                            className="bg-red-500 hover:bg-red-400"
+                                        >
                                             Delete
                                         </Button>
                                         <Button className="bg-amber-500 hover:bg-amber-400">
