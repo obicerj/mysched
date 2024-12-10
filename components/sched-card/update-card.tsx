@@ -21,6 +21,14 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "../ui/select";
+import { ValueIcon } from "@radix-ui/react-icons";
 
 const scheduleSchema = z.object({
     id: z.number().int(),
@@ -51,6 +59,25 @@ const UpdateScheduleForm: React.FC<UpdateScheduleFormProps> = ({
 }) => {
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(true);
+
+    interface Label {
+        id: number;
+        name: string;
+        color: string;
+    }
+    const [fetchLabels, setFetchLabels] = useState<Label[]>([]);
+
+    useEffect(() => {
+        const labels = async () => {
+            try {
+                const res = await axios.get("/api/labels");
+                setFetchLabels(res.data);
+            } catch (e) {
+                console.error("Error fetching labels", e);
+            }
+        };
+        labels();
+    }, []);
 
     const {
         register,
@@ -156,6 +183,45 @@ const UpdateScheduleForm: React.FC<UpdateScheduleFormProps> = ({
                                         />
                                     </PopoverContent>
                                 </Popover>
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    name="category_id"
+                    control={form.control}
+                    render={({ field }) => (
+                        <FormItem className="mt-4">
+                            <FormLabel>Label</FormLabel>
+                            <FormControl>
+                                <Select
+                                    onValueChange={(value) =>
+                                        field.onChange(parseInt(value, 10))
+                                    }
+                                    value={field.value?.toString()}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select a label" />
+                                    </SelectTrigger>
+                                    <SelectContent className="bg-white">
+                                        {fetchLabels.map((label, id) => {
+                                            return (
+                                                <SelectItem
+                                                    key={id}
+                                                    value={label.id.toString()}
+                                                >
+                                                    <div className="flex flex-row gap-2">
+                                                        <ValueIcon
+                                                            className={`mt-0.5 ${label.color} text-red-200 rounded-full`}
+                                                        />
+                                                        {label.name}
+                                                    </div>
+                                                </SelectItem>
+                                            );
+                                        })}
+                                    </SelectContent>
+                                </Select>
                             </FormControl>
                         </FormItem>
                     )}
