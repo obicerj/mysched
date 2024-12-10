@@ -53,6 +53,7 @@ export default function Labels() {
         try {
             const res = await axios.post("/api/labels", data);
             form.reset();
+            labels();
         } catch (e) {
             console.error(e);
         }
@@ -65,15 +66,16 @@ export default function Labels() {
 
     const [fetchLabels, setFetchLabels] = useState<Label[]>([]);
 
+    const labels = async () => {
+        try {
+            const res = await axios.get("/api/labels");
+            setFetchLabels(res.data);
+        } catch (e) {
+            console.error("Error fetching labels", e);
+        }
+    };
+
     useEffect(() => {
-        const labels = async () => {
-            try {
-                const res = await axios.get("/api/labels");
-                setFetchLabels(res.data);
-            } catch (e) {
-                console.error("Error fetching labels", e);
-            }
-        };
         labels();
     }, []);
 
