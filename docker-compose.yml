@@ -5,9 +5,10 @@ services:
     environment:
       MYSQL_ROOT_USER: "root"
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
-      TZ: "America/New_York"
+      TZ: "America/Toronto"
       tty: true
     ports:
         - 3306:3306
     volumes:
         - $HOME/mysql:/var/lib/mysql
+    tty: true

@@ -7,6 +7,9 @@ import { GetDBSettings, DBSettings } from "@/lib/utils";
 import { z } from "zod";
 import { use } from "react";
 
+import { format, toZonedTime } from "date-fns-tz";
+
+
 // connection parameters
 let connectionParams = GetDBSettings();
 
@@ -91,8 +94,12 @@ export async function PUT(req: NextRequest,  context: { params: {slug: string} }
 
         const { title, description, date, start_time, end_time, category_id } = validatedData;
 
-        const formattedStartTime = new Date(start_time).toISOString().slice(0, 19).replace("T", " ");
-        const formattedEndTime = new Date(end_time).toISOString().slice(0, 19).replace("T", " ");
+        // const formattedStartTime = new Date(start_time).toISOString().slice(0, 19).replace("T", " ");
+        // const formattedEndTime = new Date(end_time).toISOString().slice(0, 19).replace("T", " ");
+        const timezone = "America/Toronto";
+
+        const formattedStartTime = format(toZonedTime(start_time, timezone), "yyyy-MM-dd HH:mm:ss", { timeZone: timezone });
+        const formattedEndTime = format(toZonedTime(end_time, timezone), "yyyy-MM-dd HH:mm:ss", { timeZone: timezone });
 
 
         // connect to db

@@ -4,6 +4,9 @@ import mysql from  'mysql2/promise';
 
 import { GetDBSettings, DBSettings } from "@/lib/utils";
 
+import { format, toZonedTime } from "date-fns-tz";
+
+
 // connection parameters
 let connectionParams = GetDBSettings();
 
@@ -27,15 +30,18 @@ export async function POST(request: Request) {
 
         console.log("Formatting dates");
         const formattedDate = new Date(date).toISOString().split("T")[0]; // Format as YYYY-MM-DD
-        const formattedStartTime = new Date(start_time)
-            .toISOString()
-            .replace("T", " ")
-            .split(".")[0]; // Format as YYYY-MM-DD HH:MM:SS
-        const formattedEndTime = new Date(end_time)
-            .toISOString()
-            .replace("T", " ")
-            .split(".")[0]; // Format as YYYY-MM-DD HH:MM:SS
+        // const formattedStartTime = new Date(start_time)
+        //     .toISOString()
+        //     .replace("T", " ")
+        //     .split(".")[0]; // Format as YYYY-MM-DD HH:MM:SS
+        // const formattedEndTime = new Date(end_time)
+        //     .toISOString()
+        //     .replace("T", " ")
+        //     .split(".")[0]; // Format as YYYY-MM-DD HH:MM:SS
+        const timezone = "America/Toronto";
 
+        const formattedStartTime = format(toZonedTime(start_time, timezone), "yyyy-MM-dd HH:mm:ss", { timeZone: timezone });
+        const formattedEndTime = format(toZonedTime(end_time, timezone), "yyyy-MM-dd HH:mm:ss", { timeZone: timezone });
 
 
         // connect to db
