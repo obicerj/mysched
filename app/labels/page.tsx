@@ -30,8 +30,12 @@ import {
 import { ValueIcon } from "@radix-ui/react-icons";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
+import UpdateLabelForm from "@/components/labels/update-card";
 
 export default function Labels() {
+    // manage dialog open/close state
+    const [dialogOpen, setDialogOpen] = useState<Record<number, boolean>>({});
+
     // define the schema using Zod
     const formSchema = z.object({
         name: z.string().min(1, "Name is required"),
@@ -40,6 +44,14 @@ export default function Labels() {
 
     // initialize the form with React Hook Form and Zod resolver
     const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            name: "",
+            color: "",
+        },
+    });
+
+    const { register, handleSubmit } = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
@@ -214,9 +226,20 @@ export default function Labels() {
                                         >
                                             Delete
                                         </Button>
-                                        <Button className="bg-amber-500 hover:bg-amber-400">
-                                            Edit
-                                        </Button>
+
+                                        <UpdateLabelForm
+                                            key={label.id}
+                                            labelId={label.id}
+                                            setDialogOpen={(isOpen) =>
+                                                setDialogOpen((prev) => ({
+                                                    ...prev,
+                                                    [label.id]:
+                                                        isOpen as boolean,
+                                                }))
+                                            }
+                                            labels={labels}
+                                            label={label}
+                                        />
                                     </div>
                                 </AccordionContent>
                             </AccordionItem>
@@ -227,8 +250,6 @@ export default function Labels() {
         </div>
     );
 }
-
-import { AccordionHeader } from "@radix-ui/react-accordion";
 
 export function AccordionDemo() {
     return (
