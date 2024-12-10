@@ -243,7 +243,6 @@ export function FooterNav({ listUpdated }: { listUpdated: () => void }) {
                                                                         value={label.id.toString()}
                                                                     >
                                                                         <div className="flex flex-row gap-2">
-                                                                            {`${label.id}`}
                                                                             <ValueIcon
                                                                                 className={`mt-0.5 ${label.color} text-red-200 rounded-full`}
                                                                             />
