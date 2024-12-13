@@ -1,4 +1,4 @@
-import { Calendar, CalendarProps } from "@/components/ui/calendar";
+import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 

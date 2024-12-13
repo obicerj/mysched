@@ -97,8 +97,6 @@ export default function Home() {
 
     const totalSchedToday = mySchedule.length;
 
-    // const [deleteOpen, setDeleteOpen] = useState<Record<number, boolean>>({});
-
     const deleteSchedule = async (scheduleId: number) => {
         try {
             const res = await axios.delete("/api/schedule", {
