@@ -27,7 +27,12 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
-import { CardStackIcon, PlusIcon, ValueIcon } from "@radix-ui/react-icons";
+import {
+    CardStackIcon,
+    LightningBoltIcon,
+    PlusIcon,
+    ValueIcon,
+} from "@radix-ui/react-icons";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import UpdateLabelForm from "@/components/labels/update-card";
@@ -120,6 +125,15 @@ export default function Labels() {
                 className="fixed bottom-4 z-10 left-1/2 -translate-x-1/2 w-max flex gap-6 justify-center items-center
         border px-6 py-4 rounded-full border-amber-300 bg-amber-300"
             >
+                <a
+                    className="flex items-center gap-2 hover:underline hover:underline-offset-4"
+                    href="/"
+                    rel="noopener noreferrer"
+                >
+                    <LightningBoltIcon />
+                    Dashboard
+                </a>
+
                 <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                     <DialogTrigger className="flex items-center gap-2 hover:underline hover:underline-offset-4">
                         <PlusIcon /> <span>Add Label</span>
