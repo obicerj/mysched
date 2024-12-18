@@ -1,13 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 
-import mysql from  'mysql2/promise';
-
-import { GetDBSettings } from "@/lib/utils";
 import { z } from "zod";
 import connectionPool from "@/lib/db";
-
-// connection parameters
-let connectionParams = GetDBSettings();
 
 export async function GET(request: Request, {params}: {params: {slug: number}}) {
     try {

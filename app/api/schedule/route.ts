@@ -1,10 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
-import { formatDate, formatToZonedTime, GetDBSettings } from "@/lib/utils";
+import { formatDate, formatToZonedTime } from "@/lib/utils";
 import connectionPool from "@/lib/db";
-
-
-// connection parameters
-let connectionParams = GetDBSettings();
 
 export async function POST(request: Request) {
     try {

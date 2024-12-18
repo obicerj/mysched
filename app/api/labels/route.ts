@@ -1,17 +1,11 @@
 import { NextResponse, NextRequest } from "next/server";
 
-import mysql from  'mysql2/promise';
-
-import { GetDBSettings } from "@/lib/utils";
 import connectionPool from "@/lib/db";
-
-// connection parameters
-let connectionParams = GetDBSettings();
 
 export async function GET(request: Request) {
     try {
         const query = 'SELECT * FROM mysched.categories';
-        
+
         const [results] = await connectionPool.execute(query);
 
         // return results as json api res
