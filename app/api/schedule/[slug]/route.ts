@@ -5,8 +5,7 @@ import mysql from  'mysql2/promise';
 import { formatToZonedTime, GetDBSettings } from "@/lib/utils";
 
 import { z } from "zod";
-
-import { format, toZonedTime } from "date-fns-tz";
+import connectionPool from "@/lib/db";
 
 
 // connection parameters
@@ -17,17 +16,12 @@ export async function GET(request: Request,  { params }: { params: { slug: strin
   const slug = params.slug 
   
   try {
-    // connect to db
-    const db = await mysql.createConnection(connectionParams);
 
     // create query to fetch data
     const query = 'SELECT schedules.*, categories.name AS category_name FROM mysched.schedules JOIN categories ON schedules.category_id = categories.id WHERE schedules.id = ?';
     
     // pass parameters to the sql query
-    const [results] = await db.execute(query, [slug])
-
-    // close connection
-    await db.end();
+    const [results] = await connectionPool.execute(query, [slug])
 
 
     // return results as json api response
@@ -91,16 +85,12 @@ export async function PUT(req: NextRequest,  context: { params: {slug: string} }
 
 
         const { title, description, date, start_time, end_time, category_id } = validatedData;
-
         
         const formattedStartTime = formatToZonedTime(start_time);
         
         const formattedEndTime = formatToZonedTime(end_time);
 
-        // connect to db
-        const db = await mysql.createConnection(connectionParams);
-
-        await db.execute(
+        await connectionPool.execute(
             `UPDATE schedules SET title = ?, description = ?, date = ?, start_time = ?, end_time = ?, category_id = ? WHERE id = ?`,
             [title, description, date, formattedStartTime, formattedEndTime, category_id, parsedId]
           );
@@ -109,12 +99,9 @@ export async function PUT(req: NextRequest,  context: { params: {slug: string} }
         const query = 'SELECT schedules.*, categories.name AS category_name FROM mysched.schedules JOIN categories ON schedules.category_id = categories.id WHERE schedules.id = ?';
         
         // pass parameters to the sql query
-        const [results] = await db.execute(query, [parsedId])
+        const [results] = await connectionPool.execute(query, [parsedId])
 
         console.log({ message: "Schedule updated successfully" });
-
-        // close connection
-        await db.end();
 
         // return results as json api response
         return NextResponse.json({ message: "Schedule updated successfully", schedule: results });

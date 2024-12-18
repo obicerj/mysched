@@ -1,8 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
-
-import mysql from  'mysql2/promise';
-
 import { formatDate, formatToZonedTime, GetDBSettings } from "@/lib/utils";
+import connectionPool from "@/lib/db";
 
 
 // connection parameters
@@ -28,24 +26,12 @@ export async function POST(request: Request) {
         const formattedStartTime = formatToZonedTime(start_time);
         
         const formattedEndTime = formatToZonedTime(end_time);
-
-
-        // connect to db
-        try {
-        const db = await mysql.createConnection(connectionParams);
     
-        // Insert the data into the database
+        // insert the data into the database
         const query = `INSERT INTO mysched.schedules (title, description, date, start_time, end_time, color, category_id) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-        const [result] = await db.execute(query, [title, description, formattedDate, formattedStartTime, formattedEndTime, color, category_id]);
+        const [result] = await connectionPool.execute(query, [title, description, formattedDate, formattedStartTime, formattedEndTime, color, category_id]);
 
-        // close connection
-        await db.end();
-
-        // console.log("Query executed successfully:", result);
-    } catch (err) {
-        console.error("Database connection error:", err);
-    }
-        // Respond with success
+        // respond with success
         return NextResponse.json({ success: true });
     } catch (e) {
         return NextResponse.json(
@@ -68,15 +54,9 @@ export async function DELETE(request: NextRequest) {
             );
         }
 
-        // connect to db
-        const db = await mysql.createConnection(connectionParams);
-
         // execute delete query
         const query = `DELETE FROM mysched.schedules WHERE id = ?`;
-        const [result] = await db.execute(query, [id]);
-
-        // close db connection
-        await db.end();
+        const [result] = await connectionPool.execute(query, [id]);
 
         if (!result) {
             return NextResponse.json(

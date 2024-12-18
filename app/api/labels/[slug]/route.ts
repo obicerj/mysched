@@ -4,6 +4,7 @@ import mysql from  'mysql2/promise';
 
 import { GetDBSettings } from "@/lib/utils";
 import { z } from "zod";
+import connectionPool from "@/lib/db";
 
 // connection parameters
 let connectionParams = GetDBSettings();
@@ -19,17 +20,11 @@ export async function GET(request: Request, {params}: {params: {slug: number}}) 
             );
         }
 
-        // connect to db
-        const db = await mysql.createConnection(connectionParams);
-
         // create query to fetch data
         const query = 'SELECT * FROM categories WHERE id = ?';
         
         // pass parameters to the sql query
-        const [results] = await db.execute(query, [slug])
-
-        // close connection
-        await db.end();
+        const [results] = await connectionPool.execute(query, [slug])
 
         // return results as json api response
         return NextResponse.json(results)
@@ -77,10 +72,7 @@ export async function PUT(request: Request, context: {params: {slug: string}}) {
         const validatedData = formSchema.parse({...body, id: parsedId})
         const {name, color} = validatedData;
 
-        // connect to db
-        const db = await mysql.createConnection(connectionParams);
-
-        await db.execute(
+        await connectionPool.execute(
             `UPDATE categories SET name = ?, color = ? WHERE id = ?`,
             [name, color, parsedId]
           );
@@ -88,9 +80,7 @@ export async function PUT(request: Request, context: {params: {slug: string}}) {
 
         const query = 'SELECT * FROM categories WHERE id = ?';
 
-        const [results] = await db.execute(query, [parsedId])
-
-        await db.end();
+        const [results] = await connectionPool.execute(query, [parsedId])
 
         // return results as json api response
         return NextResponse.json({ message: "Label updated successfully", label: results });

@@ -3,21 +3,16 @@ import { NextResponse, NextRequest } from "next/server";
 import mysql from  'mysql2/promise';
 
 import { GetDBSettings } from "@/lib/utils";
+import connectionPool from "@/lib/db";
 
 // connection parameters
 let connectionParams = GetDBSettings();
 
 export async function GET(request: Request) {
     try {
-        // connect to db
-        const db = await mysql.createConnection(connectionParams);
-
         const query = 'SELECT * FROM mysched.categories';
-
-        const [results] = await db.execute(query);
-
-        // close connection
-        await db.end();
+        
+        const [results] = await connectionPool.execute(query);
 
         // return results as json api res
         return NextResponse.json(results);
@@ -45,22 +40,12 @@ export async function POST(request: Request) {
                 { status: 400 }
             );  
         }
-
-        // connect to db
-        try {
-        const db = await mysql.createConnection(connectionParams);
     
         // insert data into the database
         const query = `INSERT INTO mysched.categories (name, color) VALUES (?, ?)`;
-        const [result] = await db.execute(query, [name, color]);
 
-        // close connection
-        await db.end();
+        const [result] = await connectionPool.execute(query, [name, color]);
 
-        // console.log("Query executed successfully:", result);
-    } catch (err) {
-        console.error("Database connection error:", err);
-    }
         // Respond with success
         return NextResponse.json({ success: true });
     } catch (e) {
@@ -83,17 +68,9 @@ export async function DELETE(request: NextRequest) {
             );
         }
 
-        // connect to db
-        console.log("Connecting to the database for deletion...");
-        const db = await mysql.createConnection(connectionParams);
-        console.log("Database connected.");
-
         // execute delete query
         const query = `DELETE FROM mysched.categories WHERE id = ?`;
-        const [result] = await db.execute(query, [id]);
-
-        // close db connection
-        await db.end();
+        const [result] = await connectionPool.execute(query, [id]);
 
         if (!result) {
             return NextResponse.json(

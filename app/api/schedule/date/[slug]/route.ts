@@ -1,8 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
-
-import mysql from  'mysql2/promise';
-
 import { GetDBSettings } from "@/lib/utils";
+import connectionPool from "@/lib/db";
 
 // connection parameters
 let connectionParams = GetDBSettings();
@@ -20,17 +18,11 @@ export async function GET(request: Request,  { params }: { params: { slug: strin
             );
         }
 
-        // connect to db
-        const db = await mysql.createConnection(connectionParams);
-
         // create query to fetch data
         const query = 'SELECT schedules.*, categories.name AS category_name, categories.color AS color FROM mysched.schedules JOIN categories ON schedules.category_id = categories.id WHERE DATE(date) = DATE(?)';
         
         // pass parameters to the sql query
-        const [results] = await db.execute(query, [slug])
-
-        // close connection
-        await db.end();
+        const [results] = await connectionPool.execute(query, [slug])
 
         // return results as json api response
         return NextResponse.json(results)
