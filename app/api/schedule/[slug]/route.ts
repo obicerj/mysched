@@ -5,7 +5,6 @@ import mysql from  'mysql2/promise';
 import { GetDBSettings, DBSettings } from "@/lib/utils";
 
 import { z } from "zod";
-import { use } from "react";
 
 import { format, toZonedTime } from "date-fns-tz";
 
@@ -80,22 +79,19 @@ export async function PUT(req: NextRequest,  context: { params: {slug: string} }
           { status: 400 }
         );
       }
-
-    //   console.log("Request headers:", req.headers);
+        
         const rawBody = await req.text();
-        console.log("Raw body text:", rawBody);
+        // console.log("Raw body text:", rawBody);
 
         const body = JSON.parse(rawBody);
-        console.log("Parsed body:", body);
+        // console.log("Parsed body:", body);
 
         const validatedData = scheduleSchema.parse({ ...body, id: parsedId });
-        console.log("Validated data:", validatedData);
+        // console.log("Validated data:", validatedData);
 
 
         const { title, description, date, start_time, end_time, category_id } = validatedData;
 
-        // const formattedStartTime = new Date(start_time).toISOString().slice(0, 19).replace("T", " ");
-        // const formattedEndTime = new Date(end_time).toISOString().slice(0, 19).replace("T", " ");
         const timezone = "America/Toronto";
 
         const formattedStartTime = format(toZonedTime(start_time, timezone), "yyyy-MM-dd HH:mm:ss", { timeZone: timezone });

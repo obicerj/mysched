@@ -34,14 +34,11 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
     try {
         // parse the request body
-        console.log("Step 1: Parsing request body");
         const body = await request.json();
 
-        console.log("Parsed body:", body);
         const { name, color } = body;
 
         // validate data
-        console.log("Step 2: Validating input");
         if (!name || !color) {
             return NextResponse.json(
                 { error: "Missing required fields." },
@@ -51,12 +48,9 @@ export async function POST(request: Request) {
 
         // connect to db
         try {
-        console.log("Step 3: Connecting to the database");
         const db = await mysql.createConnection(connectionParams);
-        console.log("Database connection successful");
     
         // insert data into the database
-        console.log("Step 4: Executing the query");
         const query = `INSERT INTO mysched.categories (name, color) VALUES (?, ?)`;
         const [result] = await db.execute(query, [name, color]);
 
