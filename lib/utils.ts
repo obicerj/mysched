@@ -1,17 +1,8 @@
+import { DBSettings } from "@/types"
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
-export interface DBSettings {
-  host: string
 
-  port: number
-
-  user: string
-
-  password: string
-
-  database: string
-}
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))

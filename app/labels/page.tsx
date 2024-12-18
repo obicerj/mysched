@@ -43,6 +43,7 @@ import {
     DialogDescription,
     DialogHeader,
 } from "@/components/ui/dialog";
+import { Label } from "@/types";
 
 export default function Labels() {
     // define the schema using Zod
@@ -80,12 +81,6 @@ export default function Labels() {
             console.error(e);
         }
     };
-
-    interface Label {
-        id: number;
-        name: string;
-        color: string;
-    }
 
     const [fetchLabels, setFetchLabels] = useState<Label[]>([]);
 

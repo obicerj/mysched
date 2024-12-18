@@ -42,6 +42,7 @@ import { Calendar } from "../ui/calendar";
 import { format } from "date-fns";
 import { Select, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { SelectContent } from "@radix-ui/react-select";
+import { Label } from "@/types";
 
 export function FooterNav({ listUpdated }: { listUpdated: () => void }) {
     // manage dialog open/close state
@@ -94,11 +95,6 @@ export function FooterNav({ listUpdated }: { listUpdated: () => void }) {
         }
     };
 
-    interface Label {
-        id: number;
-        name: string;
-        color: string;
-    }
     const [fetchLabels, setFetchLabels] = useState<Label[]>([]);
 
     useEffect(() => {

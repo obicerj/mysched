@@ -10,6 +10,7 @@ import { Summary } from "@/components/sched-summary/summary";
 import { SummaryCalendar } from "@/components/sched-summary/summary-calendar";
 import { FooterNav } from "@/components/nav/footer-nav";
 import { SchedCard } from "@/components/sched-card/sched-card";
+import { Schedule } from "@/types";
 
 export default function Home() {
     const name = "Jestoni";
@@ -41,18 +42,6 @@ export default function Home() {
     const dayName = days[today.getDay()];
     const monthName = months[today.getMonth()];
     const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-    interface Schedule {
-        id: number;
-        category_id: number;
-        category_name: string;
-        color: string;
-        title: string;
-        description: string;
-        date: Date;
-        start_time: Date;
-        end_time: Date;
-    }
 
     const [mySchedule, setMySchedule] = useState<Schedule[]>([]);
 

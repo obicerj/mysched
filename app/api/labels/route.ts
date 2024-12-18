@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 
 import mysql from  'mysql2/promise';
 
-import { GetDBSettings, DBSettings } from "@/lib/utils";
+import { GetDBSettings } from "@/lib/utils";
 
 // connection parameters
 let connectionParams = GetDBSettings();
@@ -57,7 +57,7 @@ export async function POST(request: Request) {
         // close connection
         await db.end();
 
-        console.log("Query executed successfully:", result);
+        // console.log("Query executed successfully:", result);
     } catch (err) {
         console.error("Database connection error:", err);
     }

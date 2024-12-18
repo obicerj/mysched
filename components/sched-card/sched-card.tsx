@@ -40,25 +40,7 @@ import {
 } from "@/components/ui/dialog";
 import { Description } from "@radix-ui/react-dialog";
 import UpdateScheduleForm from "./update-card";
-
-// define the schedule interface
-interface Schedule {
-    id: number;
-    category_id: number;
-    category_name: string;
-    color: string;
-    title: string;
-    description: string;
-    date: Date;
-    start_time: Date;
-    end_time: Date;
-}
-
-// props interface for the SchedCard component
-interface SchedCardProps {
-    daySched: Schedule[];
-    updateScheduleList: () => void;
-}
+import { SchedCardProps, Schedule } from "@/types";
 
 export function SchedCard({ daySched, updateScheduleList }: SchedCardProps) {
     const [deleteOpen, setDeleteOpen] = useState<Record<number, boolean>>({});

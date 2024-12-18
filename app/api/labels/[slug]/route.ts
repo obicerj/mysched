@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 
 import mysql from  'mysql2/promise';
 
-import { GetDBSettings, DBSettings } from "@/lib/utils";
+import { GetDBSettings } from "@/lib/utils";
 import { z } from "zod";
 
 // connection parameters

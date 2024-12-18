@@ -1,10 +1,7 @@
 import { Calendar } from "@/components/ui/calendar";
+import { SummaryCalendarProps } from "@/types";
 import { format } from "date-fns";
-import React, { useEffect, useState } from "react";
-
-interface SummaryCalendarProps {
-    fetchSelectedDate: (date: string) => void;
-}
+import React, { useEffect } from "react";
 
 export function SummaryCalendar({ fetchSelectedDate }: SummaryCalendarProps) {
     const [date, setDate] = React.useState<Date | undefined>(new Date());

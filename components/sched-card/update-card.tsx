@@ -29,6 +29,7 @@ import {
     SelectValue,
 } from "../ui/select";
 import { ValueIcon } from "@radix-ui/react-icons";
+import { Label } from "@/types";
 
 const scheduleSchema = z.object({
     id: z.number().int(),
@@ -60,11 +61,6 @@ const UpdateScheduleForm: React.FC<UpdateScheduleFormProps> = ({
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(true);
 
-    interface Label {
-        id: number;
-        name: string;
-        color: string;
-    }
     const [fetchLabels, setFetchLabels] = useState<Label[]>([]);
 
     useEffect(() => {
