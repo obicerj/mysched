@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 
 import mysql from  'mysql2/promise';
 
-import { GetDBSettings } from "@/lib/utils";
+import { formatToZonedTime, GetDBSettings } from "@/lib/utils";
 
 import { z } from "zod";
 
@@ -92,11 +92,10 @@ export async function PUT(req: NextRequest,  context: { params: {slug: string} }
 
         const { title, description, date, start_time, end_time, category_id } = validatedData;
 
-        const timezone = "America/Toronto";
-
-        const formattedStartTime = format(toZonedTime(start_time, timezone), "yyyy-MM-dd HH:mm:ss", { timeZone: timezone });
-        const formattedEndTime = format(toZonedTime(end_time, timezone), "yyyy-MM-dd HH:mm:ss", { timeZone: timezone });
-
+        
+        const formattedStartTime = formatToZonedTime(start_time);
+        
+        const formattedEndTime = formatToZonedTime(end_time);
 
         // connect to db
         const db = await mysql.createConnection(connectionParams);

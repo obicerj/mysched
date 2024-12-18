@@ -2,9 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 
 import mysql from  'mysql2/promise';
 
-import { GetDBSettings } from "@/lib/utils";
-
-import { format, toZonedTime } from "date-fns-tz";
+import { formatDate, formatToZonedTime, GetDBSettings } from "@/lib/utils";
 
 
 // connection parameters
@@ -25,12 +23,11 @@ export async function POST(request: Request) {
             );  
         }
 
-        const formattedDate = new Date(date).toISOString().split("T")[0]; // Format as YYYY-MM-DD
+        const formattedDate = formatDate(date);
        
-        const timezone = "America/Toronto";
-
-        const formattedStartTime = format(toZonedTime(start_time, timezone), "yyyy-MM-dd HH:mm:ss", { timeZone: timezone });
-        const formattedEndTime = format(toZonedTime(end_time, timezone), "yyyy-MM-dd HH:mm:ss", { timeZone: timezone });
+        const formattedStartTime = formatToZonedTime(start_time);
+        
+        const formattedEndTime = formatToZonedTime(end_time);
 
 
         // connect to db
