@@ -3,13 +3,13 @@ import { format } from "date-fns";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 
-export function Header() {
+export function Header({ ...props }) {
     return (
         <div className="flex justify-between">
             <div>
                 <Link href="/">
                     <Avatar className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full">
-                        <AvatarImage src="https://avatars.githubusercontent.com/u/10084955?v=4" />
+                        <AvatarImage src={props.avatar} />
                         <AvatarFallback>JO</AvatarFallback>
                     </Avatar>
                 </Link>

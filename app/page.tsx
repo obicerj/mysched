@@ -103,6 +103,8 @@ export default function Home() {
     const name = session ? session.user.name : "Guest";
     const [firstName] = name?.split(" ") || ["", ""];
 
+    const avatar = session ? session.user.image : "";
+
     if (!session) {
         return (
             <div>
@@ -115,7 +117,7 @@ export default function Home() {
     return (
         <div className="p-4 text-slate-800 font-[family-name:var(--font-geist-sans)]">
             <main>
-                <Header />
+                <Header avatar={avatar} />
                 <Summary name={firstName} totalSchedToday={totalSchedToday} />
                 <SummaryCalendar fetchSelectedDate={getDate} />
                 {mySchedule.length ? (
