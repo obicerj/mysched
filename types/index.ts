@@ -35,5 +35,7 @@ export interface DBSettings {
     port: number
     user: string
     password: string
-    database: string
+    database: string,
+    waitForConnection: boolean,
+    connectionLimit: number
   }

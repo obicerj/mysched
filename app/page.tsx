@@ -5,6 +5,7 @@ import axios from "axios";
 import { format, isToday } from "date-fns";
 
 import React, { useEffect, useState } from "react";
+import { useSession, signIn, signOut } from "next-auth/react";
 import { Header } from "@/components/header/header";
 import { Summary } from "@/components/sched-summary/summary";
 import { SummaryCalendar } from "@/components/sched-summary/summary-calendar";
@@ -13,8 +14,6 @@ import { SchedCard } from "@/components/sched-card/sched-card";
 import { Schedule } from "@/types";
 
 export default function Home() {
-    const name = "Jestoni";
-
     const days = [
         "Sunday",
         "Monday",
@@ -98,6 +97,18 @@ export default function Home() {
             console.error("Error deleting schedule:");
         }
     };
+
+    const { data: session } = useSession();
+    const name = session ? session.user.name : "Guest";
+
+    if (!session) {
+        return (
+            <div>
+                <h1>You are not logged in!</h1>
+                <button onClick={() => signIn()}>Sign In</button>
+            </div>
+        );
+    }
 
     return (
         <div className="p-4 text-slate-800 font-[family-name:var(--font-geist-sans)]">

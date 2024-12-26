@@ -23,6 +23,10 @@ export const GetDBSettings = (): DBSettings => {
       password: process.env.DB_PASSWORD!,
 
       database: process.env.DB_DATABASE!,
+
+      waitForConnection: true,
+
+      connectionLimit: 10,
     }
   else
     return {
@@ -35,6 +39,10 @@ export const GetDBSettings = (): DBSettings => {
       password: process.env.DB_PASSWORD!,
 
       database: process.env.DB_DATABASE!,
+
+      waitForConnection: true,
+
+      connectionLimit: 10,
     }
 }
 
