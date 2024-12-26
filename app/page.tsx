@@ -12,6 +12,7 @@ import { SummaryCalendar } from "@/components/sched-summary/summary-calendar";
 import { FooterNav } from "@/components/nav/footer-nav";
 import { SchedCard } from "@/components/sched-card/sched-card";
 import { Schedule } from "@/types";
+import { auth } from "./api/auth/[...nextauth]/route";
 
 export default function Home() {
     const days = [
@@ -100,6 +101,7 @@ export default function Home() {
 
     const { data: session } = useSession();
     const name = session ? session.user.name : "Guest";
+    const [firstName] = name?.split(" ") || ["", ""];
 
     if (!session) {
         return (
@@ -114,7 +116,7 @@ export default function Home() {
         <div className="p-4 text-slate-800 font-[family-name:var(--font-geist-sans)]">
             <main>
                 <Header />
-                <Summary name={name} totalSchedToday={totalSchedToday} />
+                <Summary name={firstName} totalSchedToday={totalSchedToday} />
                 <SummaryCalendar fetchSelectedDate={getDate} />
                 {mySchedule.length ? (
                     <SchedCard
