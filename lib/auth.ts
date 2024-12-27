@@ -12,6 +12,11 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: "jwt",
+  },
+  debug: true,
   callbacks: {
     // run when user sign in
     async signIn({ user, account }) {
@@ -67,9 +72,14 @@ export const authOptions: NextAuthOptions = {
         }
         return token;
       },
+      
+    async redirect({ url, baseUrl }) {
+      return url.startsWith(baseUrl) ? url : baseUrl;
+    },
+    
+      
   },
-
-  secret: process.env.NEXTAUTH_SECRET,
-  debug: true,
-
+  pages: {
+    signIn: '/auth/signin'
+  }
 };

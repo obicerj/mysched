@@ -13,6 +13,7 @@ import { FooterNav } from "@/components/nav/footer-nav";
 import { SchedCard } from "@/components/sched-card/sched-card";
 import { Schedule } from "@/types";
 import { auth } from "./api/auth/[...nextauth]/route";
+import { Hero } from "@/components/hero/hero";
 
 export default function Home() {
     const days = [
@@ -103,21 +104,20 @@ export default function Home() {
     const name = session ? session.user.name : "Guest";
     const [firstName] = name?.split(" ") || ["", ""];
 
-    const avatar = session ? session.user.image : "";
-
     if (!session) {
         return (
-            <div>
-                <h1>You are not logged in!</h1>
-                <button onClick={() => signIn()}>Sign In</button>
-            </div>
+            // <div>
+            //     <h1>You are not logged in!</h1>
+            //     <button onClick={() => signIn()}>Sign In</button>
+            // </div>
+            <Hero />
         );
     }
 
     return (
         <div className="p-4 text-slate-800 font-[family-name:var(--font-geist-sans)]">
             <main>
-                <Header avatar={avatar} />
+                <Header />
                 <Summary name={firstName} totalSchedToday={totalSchedToday} />
                 <SummaryCalendar fetchSelectedDate={getDate} />
                 {mySchedule.length ? (
