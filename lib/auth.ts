@@ -11,45 +11,13 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
-    // CredentialsProvider({
-    //     name: "Credentials",
-    //     credentials: {
-    //         email: { label: "Email", type: "text" },
-    //         password: { label: "Password", type: "password" },
-    //     },
-    //     async authorize(credentials) {
-    //         const { email, password } = credentials;
-    //         if (!email || !password) return null;
-
-    //         // Query database for the user
-    //         const query = `SELECT * FROM users WHERE email = ?`;
-    //         const [rows] = await connectionPool.execute(query, [email]);
-
-    //         if (!rows || rows.length === 0) {
-    //             throw new Error("Invalid email or password");
-    //         }
-
-    //         const user = rows[0];
-
-    //         // TODO: Verify the password (e.g., using bcrypt)
-    //         // For simplicity: if passwords match in plain text
-    //         if (password !== user.password) {
-    //             throw new Error("Invalid email or password");
-    //         }
-
-    //         return { id: user.id, name: user.name, email: user.email };
-    //     },
-    // }),
   ],
   callbacks: {
     // run when user sign in
     async signIn({ user, account }) {
         const { email, name, image } = user;
-  
-        
+
         try {
-        //   const connection = await connectionPool.execute(dbConfig);
-  
           // Check if the user already exists
           const [rows] = await connectionPool.query(
             "SELECT * FROM users WHERE email = ?",
@@ -75,10 +43,7 @@ export const authOptions: NextAuthOptions = {
 
       // attach user ID to the session
     async session({ session, token }) {
-        // if (token.id) {
-        //   session.user.id = token.id;
-        // }
-        // return session;
+
         if (token.id) {
             const [rows] = await connectionPool.query("SELECT * FROM users WHERE id = ?", [token.id]);
         
@@ -89,12 +54,6 @@ export const authOptions: NextAuthOptions = {
           return session;
       },
   
-
-    // async session({ session, token }) {
-    //   session.user.id = token.sub;
-    //   return session;
-    // },
-
     // add user ID to JWT for session handling
     async jwt({ token, account, user }) {
         if (user) {
@@ -108,37 +67,9 @@ export const authOptions: NextAuthOptions = {
         }
         return token;
       },
-
-    // async jwt({ token, account }) {
-    //   if (account) {
-    //     token.sub = account?.providerAccountId;
-    //   }
-    //   return token;
-    // },
   },
-
-// session: {
-//     strategy: "jwt",
-// },
-// callbacks: {
-//     async jwt({ token, user }) {
-//         if (user) {
-//             token.id = user.id;
-//             token.name = user.name;
-//             token.email = user.email;
-//         }
-//         return token;
-//     },
-//     async session({ session, token }) {
-//         session.user.id = token.id;
-//         return session;
-//     },
-// },
-
 
   secret: process.env.NEXTAUTH_SECRET,
   debug: true,
-//   pages: {
-//     signIn: "/api/auth/signin",
-// },
+
 };

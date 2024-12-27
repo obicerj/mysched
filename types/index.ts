@@ -2,7 +2,7 @@ export interface Schedule {
     id: number;
     category_id: number;
     category_name: string;
-    color: string;
+    category_color: string;
     title: string;
     description: string;
     date: Date;
@@ -37,5 +37,6 @@ export interface DBSettings {
     password: string
     database: string,
     waitForConnection: boolean,
-    connectionLimit: number
+    connectionLimit: number,
+    queLimit: number
   }

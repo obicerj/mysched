@@ -78,7 +78,7 @@ export default function Labels() {
             form.reset();
             labels();
         } catch (e) {
-            console.error(e);
+            console.log(e);
         }
     };
 
@@ -89,7 +89,7 @@ export default function Labels() {
             const res = await axios.get("/api/labels");
             setFetchLabels(res.data);
         } catch (e) {
-            console.error("Error fetching labels", e);
+            console.log("Error fetching labels", e);
         }
     };
 
@@ -105,7 +105,7 @@ export default function Labels() {
 
             labels();
         } catch (e) {
-            console.error("Error deleting label:");
+            console.log("Error deleting label:");
         }
     };
 

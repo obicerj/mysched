@@ -27,6 +27,8 @@ export const GetDBSettings = (): DBSettings => {
       waitForConnection: true,
 
       connectionLimit: 10,
+
+      queLimit: 0
     }
   else
     return {
@@ -43,6 +45,8 @@ export const GetDBSettings = (): DBSettings => {
       waitForConnection: true,
 
       connectionLimit: 10,
+
+      queLimit: 0
     }
 }
 

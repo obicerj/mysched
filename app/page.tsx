@@ -59,7 +59,7 @@ export default function Home() {
             const res = await axios.get(`/api/schedule/date/${pickDate}`);
             setMySchedule(res.data);
         } catch (e) {
-            console.error("Error updating schedules:", e);
+            console.log("Error updating schedules:", e);
         }
     };
 
@@ -73,7 +73,7 @@ export default function Home() {
                 const res = await axios.get(`/api/schedule/date/${pickDate}`);
                 setMySchedule(res.data);
             } catch (e) {
-                console.error("Error fetching schedules:", e);
+                console.log("Error fetching schedules:", e);
             }
         };
         fetchSchedules();
@@ -95,7 +95,7 @@ export default function Home() {
             // setDeleteOpen(false);
             updateScheduleList();
         } catch (e) {
-            console.error("Error deleting schedule:");
+            console.log("Error deleting schedule:");
         }
     };
 
