@@ -48,6 +48,8 @@ export default function Home() {
 
     const [fetchDate, setFetchDate] = useState<string>("");
 
+    const [isLoadingSchedules, setIsLoadingSchedules] = useState(true);
+
     const getDate = (selectedDate: string) => {
         setFetchDate(selectedDate);
     };
@@ -57,10 +59,13 @@ export default function Home() {
         const pickDate = fetchDate || format(new Date(), "yyyy-MM-dd");
 
         try {
+            setIsLoadingSchedules(true);
             const res = await axios.get(`/api/schedule/date/${pickDate}`);
             setMySchedule(res.data);
         } catch (e) {
             console.log("Error updating schedules:", e);
+        } finally {
+            setIsLoadingSchedules(false);
         }
     };
 
@@ -71,10 +76,13 @@ export default function Home() {
 
         const fetchSchedules = async () => {
             try {
+                setIsLoadingSchedules(true);
                 const res = await axios.get(`/api/schedule/date/${pickDate}`);
                 setMySchedule(res.data);
             } catch (e) {
                 console.log("Error fetching schedules:", e);
+            } finally {
+                setIsLoadingSchedules(false);
             }
         };
         fetchSchedules();
@@ -100,18 +108,24 @@ export default function Home() {
         }
     };
 
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     const name = session ? session.user.name : "Guest";
     const [firstName] = name?.split(" ") || ["", ""];
 
-    if (!session) {
+    // show loading spinner when the authentication state is unresolved
+    if (status === "loading") {
         return (
-            // <div>
-            //     <h1>You are not logged in!</h1>
-            //     <button onClick={() => signIn()}>Sign In</button>
-            // </div>
-            <Hero />
+            <div className="flex items-center justify-center min-h-screen">
+                <p className="text-lg text-gray-600 animate-pulse">
+                    Loading...
+                </p>
+            </div>
         );
+    }
+
+    // redirect to Hero if the user is not authenticated
+    if (!session) {
+        return <Hero />;
     }
 
     return (
@@ -120,7 +134,11 @@ export default function Home() {
                 <Header />
                 <Summary name={firstName} totalSchedToday={totalSchedToday} />
                 <SummaryCalendar fetchSelectedDate={getDate} />
-                {mySchedule.length ? (
+                {isLoadingSchedules ? (
+                    <p className="text-center mt-14 text-xl text-gray-500">
+                        Fetching your schedules...
+                    </p>
+                ) : mySchedule.length ? (
                     <SchedCard
                         daySched={sortedSched}
                         updateScheduleList={updateScheduleList}

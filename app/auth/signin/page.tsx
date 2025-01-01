@@ -42,7 +42,9 @@ const SignInPage: React.FC = () => {
                     {Object.values(providers).map((provider) => (
                         <button
                             key={provider.name}
-                            onClick={() => signIn(provider.id)}
+                            onClick={() =>
+                                signIn(provider.id, { callbackUrl: "/" })
+                            }
                             className="flex items-center justify-center bg-amber-500 text-white px-5 py-3 rounded-full shadow-md hover:bg-amber-600 focus:ring-2 focus:ring-amber-300 focus:outline-none w-full"
                             aria-label={`Sign in with ${provider.name}`}
                         >
