@@ -72,10 +72,14 @@ export const authOptions: NextAuthOptions = {
         }
         return token;
       },
-      
+
     async redirect({ url, baseUrl }) {
-      return url.startsWith(baseUrl) ? url : baseUrl;
+      // redirect to the home page after successful sign-in
+      if (url.startsWith(baseUrl)) return url;
+      if (url === "/api/auth/signin") return "/";
+      return baseUrl;
     },
+
     
       
   },
