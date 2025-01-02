@@ -53,7 +53,7 @@ export function Header() {
                     </DropdownMenuTrigger>
                 </div>
                 <DropdownMenuContent className="w-48">
-                    <DropdownMenuItem asChild>
+                    {/* <DropdownMenuItem asChild>
                         <a href="/profile" className="w-full text-left">
                             Profile
                         </a>
@@ -62,7 +62,7 @@ export function Header() {
                         <a href="/settings" className="w-full text-left">
                             Settings
                         </a>
-                    </DropdownMenuItem>
+                    </DropdownMenuItem> */}
                     <DropdownMenuItem
                         onClick={handleLogout}
                         className="text-red-600"
