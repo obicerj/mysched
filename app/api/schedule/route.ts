@@ -1,17 +1,16 @@
 import { NextResponse, NextRequest } from "next/server";
-
-import mysql from  'mysql2/promise';
-
-import { GetDBSettings, DBSettings } from "@/lib/utils";
-
-import { format, toZonedTime } from "date-fns-tz";
-
-
-// connection parameters
-let connectionParams = GetDBSettings();
+import { formatDate, formatToZonedTime } from "@/lib/utils";
+import connectionPool from "@/lib/db";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { getValidatedSession } from "@/lib/session";
 
 export async function POST(request: Request) {
     try {
+        const session = await getServerSession(authOptions);
+        if(!session || !session.user?.id) {
+            return new Response(JSON.stringify({ error: "Unauthorized" }));
+        }
         // parse the request body
         const body = await request.json();
 
@@ -25,30 +24,17 @@ export async function POST(request: Request) {
             );  
         }
 
-        const formattedDate = new Date(date).toISOString().split("T")[0]; // Format as YYYY-MM-DD
+        const formattedDate = formatDate(date);
        
-        const timezone = "America/Toronto";
-
-        const formattedStartTime = format(toZonedTime(start_time, timezone), "yyyy-MM-dd HH:mm:ss", { timeZone: timezone });
-        const formattedEndTime = format(toZonedTime(end_time, timezone), "yyyy-MM-dd HH:mm:ss", { timeZone: timezone });
-
-
-        // connect to db
-        try {
-        const db = await mysql.createConnection(connectionParams);
+        const formattedStartTime = formatToZonedTime(start_time);
+        
+        const formattedEndTime = formatToZonedTime(end_time);
     
-        // Insert the data into the database
-        const query = `INSERT INTO mysched.schedules (title, description, date, start_time, end_time, color, category_id) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-        const [result] = await db.execute(query, [title, description, formattedDate, formattedStartTime, formattedEndTime, color, category_id]);
+        // insert the data into the database
+        const query = `INSERT INTO mysched.schedules (title, description, date, start_time, end_time, color, category_id, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+        const [result] = await connectionPool.execute(query, [title, description, formattedDate, formattedStartTime, formattedEndTime, color, category_id, session.user.id]);
 
-        // close connection
-        await db.end();
-
-        console.log("Query executed successfully:", result);
-    } catch (err) {
-        console.error("Database connection error:", err);
-    }
-        // Respond with success
+        // respond with success
         return NextResponse.json({ success: true });
     } catch (e) {
         return NextResponse.json(
@@ -64,6 +50,8 @@ export async function DELETE(request: NextRequest) {
         const { searchParams } = new URL(request.url);
         const id = searchParams.get("id");
 
+        const userId = await getValidatedSession();
+
         if (!id) {
             return NextResponse.json(
                 {error: "Schedule ID is required."},
@@ -71,15 +59,9 @@ export async function DELETE(request: NextRequest) {
             );
         }
 
-        // connect to db
-        const db = await mysql.createConnection(connectionParams);
-
         // execute delete query
-        const query = `DELETE FROM mysched.schedules WHERE id = ?`;
-        const [result] = await db.execute(query, [id]);
-
-        // close db connection
-        await db.end();
+        const query = `DELETE FROM mysched.schedules WHERE id = ? AND schedules.user_id = ?`;
+        const [result] = await connectionPool.execute(query, [id, userId]);
 
         if (!result) {
             return NextResponse.json(

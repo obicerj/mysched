@@ -1,17 +1,9 @@
+import { DBSettings } from "@/types"
 import { clsx, type ClassValue } from "clsx"
+import { format, toZonedTime } from "date-fns-tz"
 import { twMerge } from "tailwind-merge"
 
-export interface DBSettings {
-  host: string
 
-  port: number
-
-  user: string
-
-  password: string
-
-  database: string
-}
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -31,6 +23,12 @@ export const GetDBSettings = (): DBSettings => {
       password: process.env.DB_PASSWORD!,
 
       database: process.env.DB_DATABASE!,
+
+      waitForConnection: true,
+
+      connectionLimit: 10,
+
+      queLimit: 0
     }
   else
     return {
@@ -43,5 +41,24 @@ export const GetDBSettings = (): DBSettings => {
       password: process.env.DB_PASSWORD!,
 
       database: process.env.DB_DATABASE!,
+
+      waitForConnection: true,
+
+      connectionLimit: 10,
+
+      queLimit: 0
     }
 }
+
+export const timezone = "America/Toronto";
+
+export const formatToZonedTime = (dateTime: Date, tz = timezone) => {
+  return format(toZonedTime(dateTime, tz), "yyyy-MM-dd HH:mm:ss", { timeZone: timezone });
+}
+
+// Format as YYYY-MM-DD
+export const formatDate = (selectedDate: Date) => {
+  return new Date(selectedDate).toISOString().split("T")[0];
+}
+
+

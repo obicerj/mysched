@@ -1,23 +1,20 @@
 import { NextResponse, NextRequest } from "next/server";
 
-import mysql from  'mysql2/promise';
-
-import { GetDBSettings, DBSettings } from "@/lib/utils";
-
-// connection parameters
-let connectionParams = GetDBSettings();
+import connectionPool from "@/lib/db";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { getValidatedSession } from "@/lib/session";
 
 export async function GET(request: Request) {
     try {
-        // connect to db
-        const db = await mysql.createConnection(connectionParams);
+        
+        const userId = await getValidatedSession();
 
-        const query = 'SELECT * FROM mysched.categories';
 
-        const [results] = await db.execute(query);
+        const query = `SELECT * FROM mysched.categories WHERE user_id IS NULL OR user_id = ${userId}`;
+        // const query = 'SELECT * FROM mysched.categories';
 
-        // close connection
-        await db.end();
+        const [results] = await connectionPool.execute(query);
 
         // return results as json api res
         return NextResponse.json(results);
@@ -46,21 +43,13 @@ export async function POST(request: Request) {
             );  
         }
 
-        // connect to db
-        try {
-        const db = await mysql.createConnection(connectionParams);
-    
+        const userId = await getValidatedSession();
+
         // insert data into the database
-        const query = `INSERT INTO mysched.categories (name, color) VALUES (?, ?)`;
-        const [result] = await db.execute(query, [name, color]);
+        const query = `INSERT INTO mysched.categories (name, color, user_id) VALUES (?, ?, ?)`;
 
-        // close connection
-        await db.end();
+        const [result] = await connectionPool.execute(query, [name, color, userId]);
 
-        console.log("Query executed successfully:", result);
-    } catch (err) {
-        console.error("Database connection error:", err);
-    }
         // Respond with success
         return NextResponse.json({ success: true });
     } catch (e) {
@@ -83,17 +72,11 @@ export async function DELETE(request: NextRequest) {
             );
         }
 
-        // connect to db
-        console.log("Connecting to the database for deletion...");
-        const db = await mysql.createConnection(connectionParams);
-        console.log("Database connected.");
+        const userId = await getValidatedSession();
 
         // execute delete query
-        const query = `DELETE FROM mysched.categories WHERE id = ?`;
-        const [result] = await db.execute(query, [id]);
-
-        // close db connection
-        await db.end();
+        const query = `DELETE FROM mysched.categories WHERE id = ? AND user_id = ?`;
+        const [result] = await connectionPool.execute(query, [id, userId]);
 
         if (!result) {
             return NextResponse.json(

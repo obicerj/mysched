@@ -4,11 +4,7 @@ import * as React from "react";
 import { Clock } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { TimePickerInput } from "./time-picker-input";
-
-interface TimePickerProps {
-    date: Date | undefined;
-    setDate: (date: Date | undefined) => void;
-}
+import { TimePickerProps } from "@/types";
 
 export function TimePicker({ date, setDate }: TimePickerProps) {
     const minuteRef = React.useRef<HTMLInputElement>(null);

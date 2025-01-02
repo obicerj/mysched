@@ -1,8 +1,9 @@
 import { NextResponse, NextRequest } from "next/server";
-
-import mysql from  'mysql2/promise';
-
-import { GetDBSettings, DBSettings } from "@/lib/utils";
+import { GetDBSettings } from "@/lib/utils";
+import connectionPool from "@/lib/db";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { getValidatedSession } from "@/lib/session";
 
 // connection parameters
 let connectionParams = GetDBSettings();
@@ -10,8 +11,7 @@ let connectionParams = GetDBSettings();
 export async function GET(request: Request,  { params }: { params: { slug: string } }) {
     
     try {
-        const { slug } = await params;
-
+        const { slug } = params;
         // Ensure params and slug are available
         if (!slug) {
             return NextResponse.json(
@@ -20,17 +20,14 @@ export async function GET(request: Request,  { params }: { params: { slug: strin
             );
         }
 
-        // connect to db
-        const db = await mysql.createConnection(connectionParams);
+        const userId = await getValidatedSession();
+        
 
         // create query to fetch data
-        const query = 'SELECT schedules.*, categories.name AS category_name, categories.color AS color FROM mysched.schedules JOIN categories ON schedules.category_id = categories.id WHERE DATE(date) = DATE(?)';
+        const query = 'SELECT schedules.*, categories.name AS category_name, categories.color AS category_color FROM mysched.schedules JOIN categories ON schedules.category_id = categories.id WHERE DATE(schedules.date) = DATE(?) AND schedules.user_id = ?';
         
         // pass parameters to the sql query
-        const [results] = await db.execute(query, [slug])
-
-        // close connection
-        await db.end();
+        const [results] = await connectionPool.execute(query, [slug, userId])
 
         // return results as json api response
         return NextResponse.json(results)

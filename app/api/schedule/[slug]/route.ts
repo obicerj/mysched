@@ -1,33 +1,27 @@
 import { NextResponse, NextRequest } from "next/server";
 
-import mysql from  'mysql2/promise';
-
-import { GetDBSettings, DBSettings } from "@/lib/utils";
+import { formatToZonedTime } from "@/lib/utils";
 
 import { z } from "zod";
+import connectionPool from "@/lib/db";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { getValidatedSession } from "@/lib/session";
 
-import { format, toZonedTime } from "date-fns-tz";
-
-
-// connection parameters
-let connectionParams = GetDBSettings();
 
 export async function GET(request: Request,  { params }: { params: { slug: string } }) {
   // sched id
   const slug = params.slug 
+
+  const userId = getValidatedSession();
   
   try {
-    // connect to db
-    const db = await mysql.createConnection(connectionParams);
 
     // create query to fetch data
-    const query = 'SELECT schedules.*, categories.name AS category_name FROM mysched.schedules JOIN categories ON schedules.category_id = categories.id WHERE schedules.id = ?';
+    const query = 'SELECT schedules.*, categories.name AS category_name FROM mysched.schedules JOIN categories ON schedules.category_id = categories.id WHERE schedules.id = ? AND schedules.user_id = ?';
     
     // pass parameters to the sql query
-    const [results] = await db.execute(query, [slug])
-
-    // close connection
-    await db.end();
+    const [results] = await connectionPool.execute(query, [slug, userId])
 
 
     // return results as json api response
@@ -62,6 +56,9 @@ export async function PUT(req: NextRequest,  context: { params: {slug: string} }
         // const { id } = params;
         const { slug } = context.params;
         const parsedId = parseInt(slug, 10);
+
+        
+        const userId = await getValidatedSession();
         
 
         // Ensure params and slug are available
@@ -91,31 +88,23 @@ export async function PUT(req: NextRequest,  context: { params: {slug: string} }
 
 
         const { title, description, date, start_time, end_time, category_id } = validatedData;
+        
+        const formattedStartTime = formatToZonedTime(start_time);
+        
+        const formattedEndTime = formatToZonedTime(end_time);
 
-        const timezone = "America/Toronto";
-
-        const formattedStartTime = format(toZonedTime(start_time, timezone), "yyyy-MM-dd HH:mm:ss", { timeZone: timezone });
-        const formattedEndTime = format(toZonedTime(end_time, timezone), "yyyy-MM-dd HH:mm:ss", { timeZone: timezone });
-
-
-        // connect to db
-        const db = await mysql.createConnection(connectionParams);
-
-        await db.execute(
-            `UPDATE schedules SET title = ?, description = ?, date = ?, start_time = ?, end_time = ?, category_id = ? WHERE id = ?`,
-            [title, description, date, formattedStartTime, formattedEndTime, category_id, parsedId]
+        await connectionPool.execute(
+            `UPDATE schedules SET title = ?, description = ?, date = ?, start_time = ?, end_time = ?, category_id = ? WHERE id = ? AND user_id = ?`,
+            [title, description, date, formattedStartTime, formattedEndTime, category_id, parsedId, userId]
           );
 
         // create query to fetch data
-        const query = 'SELECT schedules.*, categories.name AS category_name FROM mysched.schedules JOIN categories ON schedules.category_id = categories.id WHERE schedules.id = ?';
+        const query = 'SELECT schedules.*, categories.name AS category_name FROM mysched.schedules JOIN categories ON schedules.category_id = categories.id WHERE schedules.id = ? AND schedules.user_id = ?';
         
         // pass parameters to the sql query
-        const [results] = await db.execute(query, [parsedId])
+        const [results] = await connectionPool.execute(query, [parsedId, userId])
 
         console.log({ message: "Schedule updated successfully" });
-
-        // close connection
-        await db.end();
 
         // return results as json api response
         return NextResponse.json({ message: "Schedule updated successfully", schedule: results });
