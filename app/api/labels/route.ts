@@ -4,8 +4,14 @@ import connectionPool from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getValidatedSession } from "@/lib/session";
+import { secureApi } from "@/lib/secureAPI";
 
-export async function GET(request: Request) {
+export async function GET(request: Request, response: Response) {
+    const unauthorizedResponse = await secureApi(request);
+    if (unauthorizedResponse) { 
+        return unauthorizedResponse;
+    }
+    
     try {
         
         const userId = await getValidatedSession();
