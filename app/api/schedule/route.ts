@@ -4,12 +4,17 @@ import connectionPool from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getValidatedSession } from "@/lib/session";
+import { secureApi } from "@/lib/secureAPI";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
     try {
         const session = await getServerSession(authOptions);
         if(!session || !session.user?.id) {
-            return new Response(JSON.stringify({ error: "Unauthorized" }));
+            // return new Response(JSON.stringify({ error: "Unauthorized" }));
+            return NextResponse.json(
+                { error: "Unauthorized" },
+                { status: 401 }
+            );
         }
         // parse the request body
         const body = await request.json();
@@ -34,6 +39,14 @@ export async function POST(request: Request) {
         const query = `INSERT INTO mysched.schedules (title, description, date, start_time, end_time, color, category_id, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
         const [result] = await connectionPool.execute(query, [title, description, formattedDate, formattedStartTime, formattedEndTime, color, category_id, session.user.id]);
 
+
+        if (!result) {
+            return NextResponse.json(
+                { error: "Failed to create the schedule." },
+                { status: 500 }
+            );
+        }
+
         // respond with success
         return NextResponse.json({ success: true });
     } catch (e) {
@@ -45,19 +58,24 @@ export async function POST(request: Request) {
 } 
 
 export async function DELETE(request: NextRequest) {
+    const unauthorizedResponse = await secureApi(request);
+    if (unauthorizedResponse) { 
+        return unauthorizedResponse;
+    }
+    
     try {
         // get ID from request query string
         const { searchParams } = new URL(request.url);
         const id = searchParams.get("id");
-
-        const userId = await getValidatedSession();
-
+        
         if (!id) {
             return NextResponse.json(
                 {error: "Schedule ID is required."},
                 {status: 400}
             );
         }
+
+        const userId = await getValidatedSession();
 
         // execute delete query
         const query = `DELETE FROM mysched.schedules WHERE id = ? AND schedules.user_id = ?`;

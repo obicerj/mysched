@@ -1,3 +1,24 @@
+import "next-auth";
+
+declare module "next-auth" {
+    interface Session {
+    user: {
+      id: number;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+    };
+  }
+}
+
+export interface User {
+    id: number;
+    name: string;
+    email: string;
+    image: string;
+    google_id: string;
+  };
+
 export interface Schedule {
     id: number;
     category_id: number;
@@ -36,7 +57,7 @@ export interface DBSettings {
     user: string
     password: string
     database: string,
-    waitForConnection: boolean,
+    waitForConnections: boolean,
     connectionLimit: number,
-    queLimit: number
+    queueLimit: number
   }

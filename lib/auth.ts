@@ -3,7 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import connectionPool from "./db";
-
+import { User } from "@/types";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -16,7 +16,7 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
-  debug: true,
+  // debug: true,
   callbacks: {
     // run when user sign in
     async signIn({ user, account }) {
@@ -24,10 +24,12 @@ export const authOptions: NextAuthOptions = {
 
         try {
           // Check if the user already exists
-          const [rows] = await connectionPool.query(
+          const result = await connectionPool.query(
             "SELECT * FROM users WHERE email = ?",
             [email]
           );
+
+          const rows = result[0] as User[]; 
   
           if (rows.length === 0) {
             // Insert the user into the database if they don't exist
@@ -50,8 +52,10 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
 
         if (token.id) {
-            const [rows] = await connectionPool.query("SELECT * FROM users WHERE id = ?", [token.id]);
+            const result = await connectionPool.query("SELECT * FROM users WHERE id = ?", [token.id]);
         
+            const rows = result[0] as User[];
+
             if (rows.length > 0) {
               session.user = { ...session.user, ...rows[0] }; // Merge user data into the session
             }
@@ -63,8 +67,10 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, account, user }) {
         if (user) {
 
-          const [rows] = await connectionPool.query("SELECT id FROM users WHERE email = ?", [user.email]);
-  
+          const result = await connectionPool.query("SELECT id FROM users WHERE email = ?", [user.email]);
+
+          const rows = result[0] as User[];
+
           if (rows.length > 0) {
             token.id = rows[0].id; // Attach user ID from database
           }

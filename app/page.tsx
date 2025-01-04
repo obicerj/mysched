@@ -56,6 +56,8 @@ export default function Home() {
 
     // update schedule list after create form submission
     const updateScheduleList = async () => {
+        if (!session) return;
+
         const pickDate = fetchDate || format(new Date(), "yyyy-MM-dd");
 
         try {
@@ -70,6 +72,8 @@ export default function Home() {
     };
 
     useEffect(() => {
+        if (!session) return;
+
         const pickDate = fetchDate
             ? fetchDate
             : format(new Date(), "yyyy-MM-dd");
@@ -96,6 +100,8 @@ export default function Home() {
     const totalSchedToday = mySchedule.length;
 
     const deleteSchedule = async (scheduleId: number) => {
+        if (!session) return;
+
         try {
             const res = await axios.delete("/api/schedule", {
                 params: { id: scheduleId },

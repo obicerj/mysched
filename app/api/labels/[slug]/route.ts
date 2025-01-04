@@ -2,13 +2,20 @@ import { NextResponse, NextRequest } from "next/server";
 
 import { z } from "zod";
 import connectionPool from "@/lib/db";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 import { getValidatedSession } from "@/lib/session";
+import { secureApi } from "@/lib/secureAPI";
 
-export async function GET(request: Request, {params}: {params: {slug: number}}) {
+export async function GET(request: NextRequest, context: {params: {slug: number}}) {
+    const { params } = context; // access params from context
+    
+    const unauthorizedResponse = await secureApi(request);
+    if (unauthorizedResponse) { 
+        return unauthorizedResponse;
+    }
+    
     try {
-        const {slug} = await params;
+        // const {slug} = await params;
+        const { slug } = await params; // Await params
 
         if(!slug) {
             return NextResponse.json(
@@ -18,7 +25,12 @@ export async function GET(request: Request, {params}: {params: {slug: number}}) 
         }
 
         const userId = getValidatedSession();
-
+        if (!userId) {
+            return NextResponse.json(
+                { error: "User session is invalid or unauthorized." },
+                { status: 403 }
+            );
+        }
 
         // create query to fetch data
         const query = 'SELECT * FROM categories WHERE id = ? AND user_id = ?';
@@ -38,14 +50,31 @@ export async function GET(request: Request, {params}: {params: {slug: number}}) 
     }
 }
 
-export async function PUT(request: Request, context: {params: {slug: string}}) {
+export async function PUT(request: NextRequest, context: {params: {slug: string}}) {
+    const { params } = context; // access params from context
+
+    const unauthorizedResponse = await secureApi(request);
+    if (unauthorizedResponse) { 
+        return unauthorizedResponse;
+    }
+
     const formSchema = z.object({
         name: z.string().min(1, "Name is required"),
         color: z.string().min(1, "Color is required"),
     });
 
     try {
-        const { slug } = context.params;
+        // const { slug } = context.params;
+
+        const { slug } = await params; // Await params
+        // ensure params and slug are available
+        if (!slug) {
+            return NextResponse.json(
+                { error: "Date parameter is required." },
+                { status: 400 }
+            );
+        }
+
         const parsedId = parseInt(slug, 10);
 
         if (isNaN(parsedId)) {
