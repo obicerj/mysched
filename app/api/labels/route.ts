@@ -35,6 +35,11 @@ export async function GET(request: Request, response: Response) {
 }
 
 export async function POST(request: Request) {
+    const unauthorizedResponse = await secureApi(request);
+    if (unauthorizedResponse) { 
+        return unauthorizedResponse;
+    }
+
     try {
         // parse the request body
         const body = await request.json();
@@ -67,6 +72,11 @@ export async function POST(request: Request) {
 } 
 
 export async function DELETE(request: NextRequest) {
+    const unauthorizedResponse = await secureApi(request);
+    if (unauthorizedResponse) { 
+        return unauthorizedResponse;
+    }
+    
     try {
         const {searchParams} = new URL(request.url);
         const id = searchParams.get("id");

@@ -4,6 +4,7 @@ import connectionPool from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getValidatedSession } from "@/lib/session";
+import { secureApi } from "@/lib/secureAPI";
 
 export async function POST(request: Request) {
     try {
@@ -45,6 +46,11 @@ export async function POST(request: Request) {
 } 
 
 export async function DELETE(request: NextRequest) {
+    const unauthorizedResponse = await secureApi(request);
+    if (unauthorizedResponse) { 
+        return unauthorizedResponse;
+    }
+    
     try {
         // get ID from request query string
         const { searchParams } = new URL(request.url);

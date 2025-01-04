@@ -7,15 +7,33 @@ import connectionPool from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getValidatedSession } from "@/lib/session";
+import { secureApi } from "@/lib/secureAPI";
 
 
-export async function GET(request: Request,  { params }: { params: { slug: string } }) {
+export async function GET(request: Request,  context: { params: { slug: string } }) {
+  const { params } = context; // access params from context
+    
+  const unauthorizedResponse = await secureApi(request);
+    if (unauthorizedResponse) { 
+        return unauthorizedResponse;
+    }
+  
   // sched id
   const slug = params.slug 
 
   const userId = getValidatedSession();
   
   try {
+
+    const { slug } = await params; // Await params
+
+    // ensure params and slug are available
+    if (!slug) {
+      return NextResponse.json(
+          { error: "Date parameter is required." },
+          { status: 400 }
+      );
+  }
 
     // create query to fetch data
     const query = 'SELECT schedules.*, categories.name AS category_name FROM mysched.schedules JOIN categories ON schedules.category_id = categories.id WHERE schedules.id = ? AND schedules.user_id = ?';
@@ -40,8 +58,15 @@ export async function GET(request: Request,  { params }: { params: { slug: strin
 }
 }
 
-export async function PUT(req: NextRequest,  context: { params: {slug: string} }) {
+export async function PUT(request: NextRequest,  context: { params: {slug: string} }) {
+  
+  const { params } = context; // access params from context
     
+  const unauthorizedResponse = await secureApi(request);
+  if (unauthorizedResponse) { 
+      return unauthorizedResponse;
+  }
+
     const scheduleSchema = z.object({
         id: z.number().int(),
         title: z.string(),
@@ -54,7 +79,17 @@ export async function PUT(req: NextRequest,  context: { params: {slug: string} }
     
     try {
         // const { id } = params;
-        const { slug } = context.params;
+        // const { slug } = context.params;
+        const { slug } = await params; // Await params
+        
+        // ensure params and slug are available
+        if (!slug) {
+            return NextResponse.json(
+                { error: "Date parameter is required." },
+                { status: 400 }
+            );
+        }
+
         const parsedId = parseInt(slug, 10);
 
         
@@ -70,14 +105,14 @@ export async function PUT(req: NextRequest,  context: { params: {slug: string} }
         }
 
         // check content type
-        if (req.headers.get("content-type") !== "application/json") {
+        if (request.headers.get("content-type") !== "application/json") {
         return NextResponse.json(
           { error: "Content-Type must be application/json." },
           { status: 400 }
         );
       }
         
-        const rawBody = await req.text();
+        const rawBody = await request.text();
         // console.log("Raw body text:", rawBody);
 
         const body = JSON.parse(rawBody);
@@ -104,7 +139,7 @@ export async function PUT(req: NextRequest,  context: { params: {slug: string} }
         // pass parameters to the sql query
         const [results] = await connectionPool.execute(query, [parsedId, userId])
 
-        console.log({ message: "Schedule updated successfully" });
+        // console.log({ message: "Schedule updated successfully" });
 
         // return results as json api response
         return NextResponse.json({ message: "Schedule updated successfully", schedule: results });

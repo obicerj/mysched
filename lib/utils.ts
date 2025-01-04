@@ -24,11 +24,11 @@ export const GetDBSettings = (): DBSettings => {
 
       database: process.env.DB_DATABASE!,
 
-      waitForConnection: true,
+      waitForConnections: true,
 
       connectionLimit: 10,
 
-      queLimit: 0
+      queueLimit: 0
     }
   else
     return {

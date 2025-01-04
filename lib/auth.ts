@@ -16,7 +16,7 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
-  debug: true,
+  // debug: true,
   callbacks: {
     // run when user sign in
     async signIn({ user, account }) {
