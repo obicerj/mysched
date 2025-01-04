@@ -2,12 +2,10 @@ import { NextResponse, NextRequest } from "next/server";
 
 import { z } from "zod";
 import connectionPool from "@/lib/db";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 import { getValidatedSession } from "@/lib/session";
 import { secureApi } from "@/lib/secureAPI";
 
-export async function GET(request: Request, context: {params: {slug: number}}) {
+export async function GET(request: NextRequest, context: {params: {slug: number}}) {
     const { params } = context; // access params from context
     
     const unauthorizedResponse = await secureApi(request);
@@ -52,7 +50,7 @@ export async function GET(request: Request, context: {params: {slug: number}}) {
     }
 }
 
-export async function PUT(request: Request, context: {params: {slug: string}}) {
+export async function PUT(request: NextRequest, context: {params: {slug: string}}) {
     const { params } = context; // access params from context
 
     const unauthorizedResponse = await secureApi(request);

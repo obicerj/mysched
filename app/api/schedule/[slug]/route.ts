@@ -4,13 +4,11 @@ import { formatToZonedTime } from "@/lib/utils";
 
 import { z } from "zod";
 import connectionPool from "@/lib/db";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 import { getValidatedSession } from "@/lib/session";
 import { secureApi } from "@/lib/secureAPI";
 
 
-export async function GET(request: Request,  context: { params: { slug: string } }) {
+export async function GET(request: NextRequest,  context: { params: { slug: string } }) {
   const { params } = context; // access params from context
     
   const unauthorizedResponse = await secureApi(request);

@@ -22,8 +22,8 @@ export function Header() {
 
     const { data: session } = useSession();
 
-    const avatar = session ? session.user.image : "";
-    const name = session ? session.user.name : "Guest";
+    const avatar: string | undefined = session?.user?.image ?? undefined;
+    const name = session?.user?.name ?? "Guest";
 
     return (
         <div className="flex justify-between items-center py-4 pl-2 pr-6">

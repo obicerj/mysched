@@ -1,8 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { GetDBSettings } from "@/lib/utils";
 import connectionPool from "@/lib/db";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 import { getValidatedSession } from "@/lib/session";
 import { secureApi } from "@/lib/secureAPI";
 
@@ -10,7 +8,7 @@ import { secureApi } from "@/lib/secureAPI";
 let connectionParams = GetDBSettings();
 
 // export async function GET(request: Request,  { params }: { params: { slug: string } }) {
-export async function GET(request: Request, context: { params: { slug: string } }) {
+export async function GET(request: NextRequest, context: { params: { slug: string } }) {
     const { params } = context; // access params from context
     
     // check API authorization

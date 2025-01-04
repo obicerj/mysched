@@ -1,12 +1,10 @@
 import { NextResponse, NextRequest } from "next/server";
 
 import connectionPool from "@/lib/db";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 import { getValidatedSession } from "@/lib/session";
 import { secureApi } from "@/lib/secureAPI";
 
-export async function GET(request: Request, response: Response) {
+export async function GET(request: NextRequest, response: Response) {
     const unauthorizedResponse = await secureApi(request);
     if (unauthorizedResponse) { 
         return unauthorizedResponse;
@@ -34,7 +32,7 @@ export async function GET(request: Request, response: Response) {
     }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
     const unauthorizedResponse = await secureApi(request);
     if (unauthorizedResponse) { 
         return unauthorizedResponse;
@@ -76,7 +74,7 @@ export async function DELETE(request: NextRequest) {
     if (unauthorizedResponse) { 
         return unauthorizedResponse;
     }
-    
+
     try {
         const {searchParams} = new URL(request.url);
         const id = searchParams.get("id");
