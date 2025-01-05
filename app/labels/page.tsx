@@ -262,45 +262,63 @@ export default function Labels() {
                     </Dialog>
                 </div>
 
-                <h1 className="text-xl font-bold mt-8 mb-4">Schedule Labels</h1>
-                <div className="mt-8 border rounded-xl px-4">
-                    <Accordion type="single" collapsible className="w-full">
-                        {fetchLabels.map((label, id) => {
-                            return (
-                                <AccordionItem value={`item-${id}`} key={id}>
-                                    <AccordionTrigger>
-                                        {label.name}
-                                    </AccordionTrigger>
-                                    <AccordionContent className="flex flex-row justify-between gap-2">
-                                        <div className="flex gap-2">
-                                            <ValueIcon
-                                                className={`mt-0.5 ${label.color} text-amber-200 rounded-full`}
-                                            />
-                                            {label.color}
-                                        </div>
+                <div className="flex flex-col justify-center items-center h-full">
+                    <h1 className="text-xl font-bold mt-8 mb-4">
+                        Schedule Labels
+                    </h1>
+                    <div className="w-full flex justify-center">
+                        <Accordion
+                            type="single"
+                            collapsible
+                            className="border rounded-xl px-4 w-2/3"
+                        >
+                            {fetchLabels.map((label, id) => {
+                                return (
+                                    <AccordionItem
+                                        value={`item-${id}`}
+                                        key={id}
+                                    >
+                                        <AccordionTrigger>
+                                            {label.name}
+                                        </AccordionTrigger>
+                                        <AccordionContent className="flex flex-row justify-between gap-2">
+                                            <div className="flex gap-2">
+                                                <ValueIcon
+                                                    className={`mt-0.5 ${label.color} text-amber-200 rounded-full`}
+                                                />
+                                                {label.color}
+                                            </div>
 
-                                        <div className="flex gap-2">
-                                            <Button
-                                                onClick={() =>
-                                                    deleteLabel(label.id)
-                                                }
-                                                className="bg-red-500 hover:bg-red-400"
-                                            >
-                                                Delete
-                                            </Button>
+                                            <div className="flex gap-2">
+                                                {session?.user.id ===
+                                                    label.user_id && (
+                                                    <>
+                                                        <Button
+                                                            onClick={() =>
+                                                                deleteLabel(
+                                                                    label.id
+                                                                )
+                                                            }
+                                                            className="bg-red-500 hover:bg-red-400"
+                                                        >
+                                                            Delete
+                                                        </Button>
 
-                                            <UpdateLabelForm
-                                                key={label.id}
-                                                labelId={label.id}
-                                                labels={labels}
-                                                label={label}
-                                            />
-                                        </div>
-                                    </AccordionContent>
-                                </AccordionItem>
-                            );
-                        })}
-                    </Accordion>
+                                                        <UpdateLabelForm
+                                                            key={label.id}
+                                                            labelId={label.id}
+                                                            labels={labels}
+                                                            label={label}
+                                                        />
+                                                    </>
+                                                )}
+                                            </div>
+                                        </AccordionContent>
+                                    </AccordionItem>
+                                );
+                            })}
+                        </Accordion>
+                    </div>
                 </div>
             </div>
         </Providers>
