@@ -2,6 +2,9 @@
 
 Stay organized with a simple, intuitive scheduling web app. This project is made of Next.JS, NextAuth, TypeScript, MySQL, Radix-ui icon, ShadCN UI, TailwindCSS. A part of personal project released on public.
 
+![Getting Started](./public/sc1.png)
+![Getting Started](./public/sc2.png)
+
 ### Environment Setup
 
 Create `.env` file
