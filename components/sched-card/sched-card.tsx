@@ -80,7 +80,10 @@ export function SchedCard({ daySched, updateScheduleList }: SchedCardProps) {
     const { errors } = form.formState;
 
     return daySched.map((event, id) => (
-        <Card key={id} className={`mt-4 shadow-none ${event.category_color}`}>
+        <Card
+            key={id}
+            className={`mt-4 w-full mx-4 shadow-none ${event.category_color}`}
+        >
             <CardHeader>
                 <CardDescription className="flex text-slate-600 justify-between">
                     <Label className="underline underline-offset-8">

@@ -138,22 +138,36 @@ export default function Home() {
         <div className="p-4 text-slate-800 font-[family-name:var(--font-geist-sans)]">
             <main>
                 <Header />
-                <Summary name={firstName} totalSchedToday={totalSchedToday} />
-                <SummaryCalendar fetchSelectedDate={getDate} />
-                {isLoadingSchedules ? (
-                    <p className="text-center mt-14 text-xl text-gray-500">
-                        Fetching your schedules...
-                    </p>
-                ) : mySchedule.length ? (
-                    <SchedCard
-                        daySched={sortedSched}
-                        updateScheduleList={updateScheduleList}
-                    />
-                ) : (
-                    <p className="text-center mt-14 mb-32 text-3xl text-slate-300 font-bold">
-                        Your schedule is empty
-                    </p>
-                )}
+
+                <div className="flex flex-col md:flex-row md:justify-between md:space-x-8">
+                    <div className="md:order-1">
+                        <div>
+                            <Summary
+                                name={firstName}
+                                totalSchedToday={totalSchedToday}
+                            />
+                        </div>
+                        <div>
+                            <SummaryCalendar fetchSelectedDate={getDate} />
+                        </div>
+                    </div>
+                    <div className="md:order-2 mt-6 grow flex flex-col items-center justify-center">
+                        {isLoadingSchedules ? (
+                            <p className="text-center mt-14 text-xl text-gray-500">
+                                Fetching your schedules...
+                            </p>
+                        ) : mySchedule.length ? (
+                            <SchedCard
+                                daySched={sortedSched}
+                                updateScheduleList={updateScheduleList}
+                            />
+                        ) : (
+                            <p className="text-center mt-14 mb-32 text-3xl text-slate-300 font-bold">
+                                Your schedule is empty
+                            </p>
+                        )}
+                    </div>
+                </div>
             </main>
 
             <FooterNav listUpdated={updateScheduleList} />
