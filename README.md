@@ -1,55 +1,54 @@
-### TO DO LIST
+# myShed
 
--   Edit form
--   CRUD Labels
--   Add labels on create and edit form
+Stay organized with a simple, intuitive scheduling web app. This project is made of Next.JS, NextAuth, TypeScript, MySQL, Radix-ui icon, ShadCN UI, TailwindCSS. A part of personal project released on public.
 
--   Refactor codes (ts)
--   User Account Middleware
+### Environment Setup
 
--   add desktop view
-
--   Mysql dump file
-
--   write testing using Jest and Vitest
+Create `.env` file
 
 ```
-docker-compose up -d
+NODE_ENV = development
 ```
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Create `.env.local` file
 
-## Getting Started
+```
+APP_NAME=MySched
+APP_ENV=development
+APP_URL=http://localhost
+APP_DOMAIN=localhost
 
-First, run the development server:
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=mysched
+DB_USERNAME=root
+DB_PASSWORD=
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+NEXTAUTH_SECRET=
+NEXTAUTH_URL=http://localhost:3000
+
+GITHUB_ID=
+GITHUB_SECRET=
+
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+AUTH_SECRET=
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Run Docker
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+`docker-compose up -d`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### MySQL Dump file
 
-## Learn More
+Import `mysched_2025-01-02.sql` in your MySQL `mysched` database.
 
-To learn more about Next.js, take a look at the following resources:
+### Access on browser
 
--   [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
--   [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Open [http://localhost:3000](http://localhost:3000) with your browser to view the mySched web app.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+#
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Personal project of
+[Jestoni Obice](https://jestoni.vercel.app)
