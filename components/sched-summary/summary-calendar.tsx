@@ -13,7 +13,7 @@ export function SummaryCalendar({ fetchSelectedDate }: SummaryCalendarProps) {
     }, [date, fetchSelectedDate]);
 
     return (
-        <div className="mt-6">
+        <div className="mt-8 border rounded-xl p-4">
             <Calendar
                 selected={date}
                 onSelect={setDate}
