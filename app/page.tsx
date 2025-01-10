@@ -6,7 +6,7 @@ import { format, isToday } from "date-fns";
 
 import React, { useEffect, useState } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { Header } from "@/components/header/header";
+
 import { Summary } from "@/components/sched-summary/summary";
 import { SummaryCalendar } from "@/components/sched-summary/summary-calendar";
 import { FooterNav } from "@/components/nav/footer-nav";
@@ -14,6 +14,7 @@ import { SchedCard } from "@/components/sched-card/sched-card";
 import { Schedule } from "@/types";
 import { auth } from "./api/auth/[...nextauth]/route";
 import { Hero } from "@/components/hero/hero";
+import Header from "@/components/header/header";
 
 export default function Home() {
     const days = [
@@ -115,7 +116,7 @@ export default function Home() {
     };
 
     const { data: session, status } = useSession();
-    const name = session ? session.user.name : "Guest";
+    const name = session ? session?.user?.name : "Guest";
     const [firstName] = name?.split(" ") || ["", ""];
 
     // show loading spinner when the authentication state is unresolved
@@ -139,8 +140,8 @@ export default function Home() {
             <main>
                 <Header />
 
-                <div className="flex flex-col md:flex-row md:justify-between md:space-x-8">
-                    <div className="md:order-1">
+                <div className="flex flex-col md:flex-row md:justify-between md:space-x-8 pl-2 pr-4">
+                    <div className="md:order-1 xs:w-full md:w-6/12 lg:w-7/12 xl:w-5/12">
                         <div>
                             <Summary
                                 name={firstName}
@@ -151,7 +152,7 @@ export default function Home() {
                             <SummaryCalendar fetchSelectedDate={getDate} />
                         </div>
                     </div>
-                    <div className="md:order-2 mt-6 grow flex flex-col items-center justify-center">
+                    <div className="md:order-2 xs:w-full md:w-6/12 lg:w-5/12 xl:w-7/12 mt-6 grow flex flex-col items-center justify-center">
                         {isLoadingSchedules ? (
                             <p className="text-center mt-14 text-xl text-gray-500">
                                 Fetching your schedules...

@@ -9,7 +9,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export function Header() {
+const Header = () => {
     const clearClientSideCache = () => {
         localStorage.clear();
         sessionStorage.clear();
@@ -79,4 +79,6 @@ export function Header() {
             </p>
         </div>
     );
-}
+};
+
+export default Header;

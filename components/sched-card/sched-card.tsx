@@ -82,7 +82,7 @@ export function SchedCard({ daySched, updateScheduleList }: SchedCardProps) {
     return daySched.map((event, id) => (
         <Card
             key={id}
-            className={`mt-4 w-full mx-4 shadow-none ${event.category_color}`}
+            className={`mt-4 w-full shadow-none ${event.category_color}`}
         >
             <CardHeader>
                 <CardDescription className="flex text-slate-600 justify-between">
