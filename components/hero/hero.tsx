@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export function Hero() {
     return (
-        <div>
+        <div data-testid="hero-component">
             <Head>
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link
@@ -23,8 +23,11 @@ export function Hero() {
                         <Image
                             src="/storyset.png"
                             alt="Hero Image"
-                            layout="fill"
-                            objectFit="contain"
+                            fill
+                            style={{ objectFit: "contain" }}
+
+                            // layout="fill"
+                            // objectFit="contain"
                         />
                     </div>
 
@@ -40,6 +43,7 @@ export function Hero() {
 
                     <button
                         onClick={() => signIn()}
+                        data-testid="login-button"
                         // className="bg-amber-500 text-white hover:bg-amber-600 px-6 py-3 rounded-full text-lg font-semibold transition duration-300"
                         className="bg-amber-500 text-white px-6 py-3 rounded-full shadow-md hover:bg-amber-600 focus:ring-2 focus:ring-amber-300 focus:outline-none text-lg font-semibold"
                     >

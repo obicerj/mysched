@@ -1,4 +1,5 @@
 import "next-auth";
+import { IncomingMessage, ServerResponse } from 'http';
 
 declare module "next-auth" {
     interface Session {
@@ -10,6 +11,17 @@ declare module "next-auth" {
     };
   }
 }
+
+declare module 'node-mocks-http' {
+  export function createMocks(options?: any): {
+    req: IncomingMessage;
+    res: ServerResponse;
+  };
+
+  export function createRequest(options?: any): IncomingMessage;
+  export function createResponse(options?: any): ServerResponse;
+}
+
 
 export interface User {
     id: number;
@@ -29,6 +41,7 @@ export interface Schedule {
     date: Date;
     start_time: Date;
     end_time: Date;
+    color?: string;
 }
 
 export interface Label {

@@ -55,6 +55,15 @@ export default function Home() {
         setFetchDate(selectedDate);
     };
 
+    // const { data: session, status } = useSession();
+    // const name = session ? session?.user?.name : "Guest";
+    // const [firstName] = name?.split(" ") || ["", ""];
+    const { data: session, status } = useSession() || {}; // always return a fallback
+
+    // proceed to access properties safely
+    const name = session?.user?.name ?? "Guest";
+    const [firstName] = name?.split(" ") || ["", ""];
+
     // update schedule list after create form submission
     const updateScheduleList = async () => {
         if (!session) return;
@@ -114,10 +123,6 @@ export default function Home() {
             console.log("Error deleting schedule:");
         }
     };
-
-    const { data: session, status } = useSession();
-    const name = session ? session?.user?.name : "Guest";
-    const [firstName] = name?.split(" ") || ["", ""];
 
     // show loading spinner when the authentication state is unresolved
     if (status === "loading") {
