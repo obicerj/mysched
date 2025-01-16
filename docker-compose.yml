@@ -12,3 +12,14 @@ services:
     volumes:
         - $HOME/mysql:/var/lib/mysql
     tty: true
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ABSOLUTE_URI: "http://localhost:8080"
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
