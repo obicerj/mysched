@@ -14,7 +14,8 @@ import { SchedCard } from "@/components/sched-card/sched-card";
 import { Schedule } from "@/types";
 import { auth } from "./api/auth/[...nextauth]/route";
 import { Hero } from "@/components/hero/hero";
-import Header from "@/components/header/header";
+import { Header } from "@/components/header/header";
+
 
 export default function Home() {
     const days = [

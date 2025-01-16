@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { Header } from "@/components/header/header";
+
 import {
     Form,
     FormControl,
@@ -47,6 +47,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/types";
 import Providers from "../providers";
+import { Header } from "@/components/header/header";
 
 export default function Labels() {
     // define the schema using Zod
